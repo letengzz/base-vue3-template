@@ -1558,7 +1558,7 @@ npx husky-init
 
 3. 安装 husky 执行 `pnpm i`
 
-```js
+```shell
 pnpm i
 ```
 
@@ -1570,7 +1570,7 @@ lint-staged 是一个在 git add 到暂存区的文件运行 linters (ESLint/Pre
 
 1. 安装：
 
-```js
+```shell
 pnpm i lint-staged -D
 ```
 
@@ -1593,7 +1593,7 @@ export default {
 
 > package.json
 
-```json
+```shell
 "scripts": {
   // ...
   "lint:lint-staged": "lint-staged"
@@ -1604,7 +1604,7 @@ export default {
 
 npx 命令会自动执行安装过的 lint-staged 插件，从而执行 lint-staged.config.mjs 配置文件
 
-```js
+```shell
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
@@ -1621,7 +1621,7 @@ Commitlint 官网：https://commitlint.js.org/)
 
 1. 安装：
 
-```js
+```shell
 pnpm i @commitlint/cli @commitlint/config-conventional -D
 ```
 
@@ -1664,7 +1664,7 @@ export default {
 
 3. 执行下面命令生成 `commint-msg` 钩子用于 git 提交信息校验
 
-```js
+```shell
 npx husky add .husky/commit-msg "npx --no -- commitlint --edit $1"
 ```
 
