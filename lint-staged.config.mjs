@@ -4,5 +4,5 @@ export default {
   '*.json': ['eslint --fix'],
   '*.vue': ['eslint --fix'],
   '*.{scss,less,styl,html}': ['stylelint --fix --allow-empty-input'],
-  '*.md': ['prettier --write','eslint --fix'],
+  '*.md': ['prettier --write', 'eslint --fix'],
 }
