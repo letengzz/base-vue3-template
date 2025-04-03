@@ -1104,24 +1104,24 @@ vite.config.ts 抽离出插件，打包配置 server 配置等复杂配置。
 
 > import-meta.d.ts
 
-```
+```typescript
 interface ImportMeta {
-  readonly env: ImportMetaEnv
+  readonly env: ImportMetaEnv;
 }
 
 interface ViteEnv {
-  VITE_APP_THEME_COLOR: string
-  VITE_BASE_URL: string
-  VITE_BASE_TARGET_URL: string
-  VITE_VISUALIZER_OPEN: boolean
-  VITE_BUILD_GZIP: boolean
-  VITE_BUILD_VENDOR: boolean
-  VITE_PROXY: any
-  VITE_PORT: number
+  VITE_APP_THEME_COLOR: string;
+  VITE_BASE_URL: string;
+  VITE_BASE_TARGET_URL: string;
+  VITE_VISUALIZER_OPEN: boolean;
+  VITE_BUILD_GZIP: boolean;
+  VITE_BUILD_VENDOR: boolean;
+  VITE_PROXY: any;
+  VITE_PORT: number;
 }
 
 interface ImportMetaEnv extends ViteEnv {
-  __: unknown
+  __: unknown;
 }
 ```
 
@@ -1261,7 +1261,9 @@ export default function useProxy(list: ProxyList = []) {
 
 在 build 下新建 plugins 文件夹，新建文件：
 
-- > build/plugins/autoImport.ts：
+- 抽离自动导入：
+
+  > build/plugins/autoImport.ts：
 
   ```typescript
   // 此插件用于自动导入API和组件
@@ -1300,11 +1302,12 @@ export default function useProxy(list: ProxyList = []) {
       dirs: ["src/api/**/*.ts", "src/utils/**/*.ts"], // 自动导入项目中自定义的API和工具函数
     });
   };
-
   export default useAutoImport;
   ```
 
-- > build/plugins/checker.ts：
+- 抽离代码检查：
+
+  > build/plugins/checker.ts：
 
   ```typescript
   // vite.config.ts
@@ -1340,7 +1343,9 @@ export default function useProxy(list: ProxyList = []) {
   }
   ```
 
-- > build/plugins/component.ts：
+- 抽离组件：
+
+  > build/plugins/component.ts：
 
   ```typescript
   // import { ElementPlusResolver, AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
@@ -1352,7 +1357,7 @@ export default function useProxy(list: ProxyList = []) {
    * 该插件可以自动导入组件，无需手动import
    * 提高开发效率并减少样板代码
    */
-  const useComponents = () => {
+  constuseComponents = () => {
     return Components({
       resolvers: [
         //   ElementPlusResolver(), // Element Plus组件库解析器（已禁用）
@@ -1368,7 +1373,9 @@ export default function useProxy(list: ProxyList = []) {
   export default useComponents;
   ```
 
-- > build/plugins/compress.ts：
+- 抽离压缩：
+
+  > build/plugins/compress.ts：
 
   ```typescript
   import viteCompression from "vite-plugin-compression";
@@ -1389,7 +1396,9 @@ export default function useProxy(list: ProxyList = []) {
   export default useCompress;
   ```
 
-- > build/plugins/devTools.ts：
+- 抽离 DevTools：
+
+  > build/plugins/devTools.ts：
 
   ```typescript
   import VueDevTools from "vite-plugin-vue-devtools";
@@ -1400,76 +1409,12 @@ export default function useProxy(list: ProxyList = []) {
     return VueDevTools({
       componentInspector: {
         // 如果是windows 'control-shift' , 如果是macOS 'meta-shift'
-        toggleComboKey: "meta-shift",
+        toggleComboKey: "control-shift",
       },
     });
   };
 
   export default useVueDevTools;
-  ```
-
-- > build/plugins/unocss.ts：
-
-  ```typescript
-  // unocss vite插件配置
-  import UnoCSS from "unocss/vite";
-  /**
-   *  使用unocss
-   */
-  const useUnocss = () => {
-    return UnoCSS();
-  };
-
-  export default useUnocss;
-  ```
-
-- > build/plugins/index.ts：
-
-  ```typescript
-  /**
-   * Vite插件配置文件
-   * 根据不同环境加载相应的插件
-   */
-  import type { PluginOption } from "vite";
-
-  import vue from "@vitejs/plugin-vue";
-
-  import vueJsx from "@vitejs/plugin-vue-jsx";
-  import useAutoImport from "./autoImport"; // 自动导入API
-  import useChecker from "./checker"; // 代码检查工具
-  import useComponents from "./component"; // 组件自动注册
-  import useCompress from "./compress"; // 压缩相关插件
-  import useVueDevTools from "./devTools"; // Vue开发者工具
-  import useUnocss from "./unocss"; // 原子化CSS工具
-
-  /**
-   * 配置并返回Vite插件列表
-   * @param isBuild 是否为生产环境构建
-   * @param viteEnv 环境变量
-   * @returns 插件数组
-   */
-  const useVitePlugins = (isBuild: boolean, viteEnv: ViteEnv) => {
-    const { VITE_BUILD_GZIP } = viteEnv;
-    const plugins: PluginOption[] = [vue(), vueJsx()];
-
-    plugins.push(useUnocss());
-    plugins.push(useAutoImport());
-    plugins.push(useComponents());
-
-    if (!isBuild) {
-      plugins.push(useVueDevTools());
-      plugins.push(useChecker());
-    }
-
-    if (isBuild) {
-      // 打包开启 进度条 图片压缩 gzip压缩 代码分析
-      // plugins.push(useImagemin())
-      VITE_BUILD_GZIP && plugins.push(useCompress());
-    }
-    return plugins;
-  };
-
-  export default useVitePlugins;
   ```
 
 > vite.config.ts
