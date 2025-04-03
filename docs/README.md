@@ -96,35 +96,35 @@ package-manager-strict=false
 > src/router/index.ts
 
 ```typescript
-import type { App } from "vue";
-import type { RouteRecordRaw } from "vue-router";
-import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import type { App } from 'vue'
+import type { RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
+import HomeView from '../views/HomeView.vue'
 
 const routes: RouteRecordRaw[] = [
   {
-    path: "/",
-    name: "home",
-    component: HomeView,
+    path: '/',
+    name: 'home',
+    component: HomeView
   },
   {
-    path: "/about",
-    name: "about",
+    path: '/about',
+    name: 'about',
     // route level code-splitting
     // this generates a separate chunk (About.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import("../views/AboutView.vue"),
-  },
-];
+    component: () => import('../views/AboutView.vue')
+  }
+]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
-});
+  routes
+})
 
 // export default router
 export function useRouter(app: App) {
-  app.use(router);
+  app.use(router)
 }
 ```
 
@@ -133,19 +133,19 @@ export function useRouter(app: App) {
 > src/main.ts
 
 ```typescript
-import { createPinia } from "pinia";
+import { createPinia } from 'pinia'
 
-import { createApp } from "vue";
-import App from "./App.vue";
+import { createApp } from 'vue'
+import App from './App.vue'
 
-import { useRouter } from "./router";
+import { useRouter } from './router'
 
-const app = createApp(App);
+const app = createApp(App)
 
-app.use(createPinia());
-useRouter(app);
+app.use(createPinia())
+useRouter(app)
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 ## 调整 Pinia
@@ -161,14 +161,14 @@ pnpm install pinia-plugin-persistedstate
 > src/stores/index.ts
 
 ```typescript
-import type { App } from "vue";
-import { createPinia } from "pinia";
-import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
+import type { App } from 'vue'
+import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 export function usePinia(app: App) {
-  const pinia = createPinia();
-  pinia.use(piniaPluginPersistedstate);
-  app.use(pinia);
+  const pinia = createPinia()
+  pinia.use(piniaPluginPersistedstate)
+  app.use(pinia)
 }
 ```
 
@@ -177,18 +177,18 @@ export function usePinia(app: App) {
 > src/main.ts
 
 ```typescript
-import { createApp } from "vue";
-import App from "./App.vue";
+import { createApp } from 'vue'
+import App from './App.vue'
 
-import { useRouter } from "./router";
-import { usePinia } from "./stores";
+import { useRouter } from './router'
+import { usePinia } from './stores'
 
-const app = createApp(App);
+const app = createApp(App)
 
-useRouter(app);
-usePinia(app);
+useRouter(app)
+usePinia(app)
 
-app.mount("#app");
+app.mount('#app')
 ```
 
 使用：
@@ -197,9 +197,9 @@ app.mount("#app");
 
 ```vue
 <script setup>
-import { useCounterStore } from "@/stores/counter";
+import { useCounterStore } from '@/stores/counter'
 
-const counter = useCounterStore();
+const counter = useCounterStore()
 </script>
 
 <template>
@@ -223,28 +223,28 @@ const counter = useCounterStore();
 > src/stores/counter.ts
 
 ```typescript
-import { defineStore } from "pinia";
-import { computed, ref } from "vue";
+import { defineStore } from 'pinia'
+import { computed, ref } from 'vue'
 
 export const useCounterStore = defineStore(
-  "counter",
+  'counter',
   () => {
-    const count = ref(0);
-    const doubleCount = computed(() => count.value * 2);
+    const count = ref(0)
+    const doubleCount = computed(() => count.value * 2)
     function increment() {
-      count.value++;
+      count.value++
     }
-    return { count, doubleCount, increment };
+    return { count, doubleCount, increment }
   },
   {
     persist: [
       {
-        pick: ["count"], // 指定字段
-        storage: localStorage, // 存储方式
-      },
-    ],
+        pick: ['count'], // 指定字段
+        storage: localStorage // 存储方式
+      }
+    ]
   }
-);
+)
 ```
 
 ## antfu 组合 prettier&eslint
@@ -502,11 +502,11 @@ typescript 不能识别 .vue 文件
 
 ```typescript
 /// <reference types="vite/client" />
-declare module "*.vue" {
-  import type { DefineComponent } from "vue";
+declare module '*.vue' {
+  import type { DefineComponent } from 'vue'
 
-  const vueComponent: DefineComponent<object, object, any>;
-  export default vueComponent;
+  const vueComponent: DefineComponent<object, object, any>
+  export default vueComponent
 }
 ```
 
@@ -530,16 +530,16 @@ pnpm install -D @iconify-json/ep @iconify-json/ant-design @iconify/utils
 
 ```typescript
 // unocss vite插件
-import UnoCSS from "unocss/vite";
+import UnoCSS from 'unocss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
   // ...
   plugins: [
     // ...
-    UnoCSS(),
-  ],
-});
+    UnoCSS()
+  ]
+})
 ```
 
 配置 UnoCSS：
@@ -548,27 +548,27 @@ export default defineConfig({
 
 ```typescript
 // uno.config.ts
-import fs from "node:fs";
-import path from "node:path";
+import fs from 'node:fs'
+import path from 'node:path'
 // 预设rem转px
-import presetRemToPx from "@unocss/preset-rem-to-px";
+import presetRemToPx from '@unocss/preset-rem-to-px'
 // transformerDirectives 可以使用 @apply @screen theme函数
-import transformerDirective from "@unocss/transformer-directives";
+import transformerDirective from '@unocss/transformer-directives'
 import {
   defineConfig,
   presetAttributify,
   presetIcons,
   presetUno,
-  transformerVariantGroup,
-} from "unocss";
+  transformerVariantGroup
+} from 'unocss'
 
 // import { FileSystemIconLoader } from '@iconify/utils/lib/loader/node-loaders'
 // loader helpers -- pnpm i @iconify/utils -D 官网的不晓得为啥 jenkins 打包总会出点问题
 // TODO: 上面失效用下面替代 pnpm i unplugin-icons -D
-import { FileSystemIconLoader } from "unplugin-icons/loaders";
+import { FileSystemIconLoader } from 'unplugin-icons/loaders'
 
 // SVG图标基础目录
-const SVG_BASE_DIR = "./src/assets/svg";
+const SVG_BASE_DIR = './src/assets/svg'
 
 export default defineConfig({
   presets: [
@@ -580,7 +580,7 @@ export default defineConfig({
     presetUno(),
     // 现在mt-1会转换为 margin-top: 1px
     presetRemToPx({
-      baseFontSize: 4,
+      baseFontSize: 4
     }),
     // 自动引入图标配置
     presetIcons({
@@ -590,23 +590,23 @@ export default defineConfig({
       customizations: {
         transform(svg, collection) {
           // 如果是menu图标，则添加fill="currentColor"
-          if (collection === "menu") {
-            return svg.replace(/^<svg /, '<svg fill="currentColor" ');
+          if (collection === 'menu') {
+            return svg.replace(/^<svg /, '<svg fill="currentColor" ')
           }
-          return svg;
-        },
+          return svg
+        }
       },
       collections: {
         // 本地SVG图标集合 自动读取SVG_BASE_DIR下面文件夹里面的图标 使用方式为 i-文件夹名称-图标名称
         ...loadLocalSvgCollections(),
         // 按需加载的图标集合 非必须
         // 'ant-design': () => import('@iconify-json/ant-design/icons.json').then(i => i.default),
-        ep: () => import("@iconify-json/ep/icons.json").then((i) => i.default),
-      },
-    }),
+        ep: () => import('@iconify-json/ep/icons.json').then((i) => i.default)
+      }
+    })
   ],
   // 安全列表 动态图标需要 例如：<div i-menu-home /> 菜单图标是后端返回的需要动态处理
-  safelist: generateSafeList(["menu"]), // 传入数组参数
+  safelist: generateSafeList(['menu']), // 传入数组参数
   transformers: [transformerDirective(), transformerVariantGroup()],
   // 自定义配置
   rules: [
@@ -622,14 +622,14 @@ export default defineConfig({
       /^bg-img-\[(.+)\]$/,
       ([, value]) => {
         // 替换下划线为正常的路径分隔符
-        const path = value.replace(/_/g, "/");
+        const path = value.replace(/_/g, '/')
         return {
-          "background-image": `url(${path})`,
-          "background-repeat": "no-repeat",
-          "background-size": "100% 100%",
-        };
-      },
-    ],
+          'background-image': `url(${path})`,
+          'background-repeat': 'no-repeat',
+          'background-size': '100% 100%'
+        }
+      }
+    ]
   ],
   // 自定义属性 一个属性可以对应多个unocss类值
   shortcuts: [
@@ -644,84 +644,84 @@ export default defineConfig({
     [
       /^t(\d{2})(\d)?(b\d+)?$/,
       ([, size, opacity, weight]) => {
-        const fontSize = `text-${size}`;
-        const fontWeight = weight ? `font-${weight.slice(1)}00` : "";
+        const fontSize = `text-${size}`
+        const fontWeight = weight ? `font-${weight.slice(1)}00` : ''
         const opacityValue = opacity
           ? (Number(opacity) * 0.1 + 0.05).toFixed(2)
-          : "1";
-        const color = `text-[rgba(37,51,71,${opacityValue})]`;
-        return `${fontSize} ${fontWeight} ${color}`;
-      },
+          : '1'
+        const color = `text-[rgba(37,51,71,${opacityValue})]`
+        return `${fontSize} ${fontWeight} ${color}`
+      }
     ],
     {
       // 垂直水平居中
-      "flex-center": "flex justify-center items-center",
+      'flex-center': 'flex justify-center items-center',
       // 放在最后
-      "flex-col-end": "flex justify-end items-center",
+      'flex-col-end': 'flex justify-end items-center',
       // 垂直居中
-      "flex-middle": "flex items-center",
+      'flex-middle': 'flex items-center',
       // 分开两边
-      "flex-between": "flex justify-between items-center",
+      'flex-between': 'flex justify-between items-center',
       // 竖直居中
-      "flex-col-center": "flex flex-col justify-center",
+      'flex-col-center': 'flex flex-col justify-center',
       // 字体基线对其
-      "flex-baseline": "flex items-baseline",
-    },
+      'flex-baseline': 'flex items-baseline'
+    }
   ],
   theme: {
     breakpoints: {
-      sm: "640px",
-      md: "768px",
-      lg: "1024px",
-      xl: "1280px",
-    },
-  },
-});
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px'
+    }
+  }
+})
 // 本地 SVG 图标存放目录 用于动态渲染图标 例如：菜单按钮
 function generateSafeList(collections: string[]) {
-  const safeList: string[] = [];
+  const safeList: string[] = []
   collections.forEach((collection) => {
     try {
-      const dirPath = path.resolve(SVG_BASE_DIR, collection);
+      const dirPath = path.resolve(SVG_BASE_DIR, collection)
       if (fs.existsSync(dirPath) && fs.statSync(dirPath).isDirectory()) {
-        const files = fs.readdirSync(dirPath);
+        const files = fs.readdirSync(dirPath)
         const icons = files
-          .filter((file) => file.endsWith(".svg"))
-          .map((file) => `i-${collection}-${path.basename(file, ".svg")}`);
-        safeList.push(...icons);
+          .filter((file) => file.endsWith('.svg'))
+          .map((file) => `i-${collection}-${path.basename(file, '.svg')}`)
+        safeList.push(...icons)
       }
     } catch (error) {
-      console.error(`无法读取图标集合 ${collection}:`, error);
+      console.error(`无法读取图标集合 ${collection}:`, error)
     }
-  });
+  })
 
-  return safeList;
+  return safeList
 }
 
 // 加载本地SVG图标集合
 function loadLocalSvgCollections() {
-  const result: Record<string, ReturnType<typeof FileSystemIconLoader>> = {};
+  const result: Record<string, ReturnType<typeof FileSystemIconLoader>> = {}
 
   try {
     // 读取SVG_BASE_DIR目录下的所有内容
-    const items = fs.readdirSync(SVG_BASE_DIR);
+    const items = fs.readdirSync(SVG_BASE_DIR)
 
     // 筛选出文件夹
     const collections = items.filter((item) => {
-      const itemPath = path.join(SVG_BASE_DIR, item);
-      return fs.existsSync(itemPath) && fs.statSync(itemPath).isDirectory();
-    });
+      const itemPath = path.join(SVG_BASE_DIR, item)
+      return fs.existsSync(itemPath) && fs.statSync(itemPath).isDirectory()
+    })
 
     // 为每个文件夹创建FileSystemIconLoader
     collections.forEach((collection) => {
       result[collection] = FileSystemIconLoader(
         path.join(SVG_BASE_DIR, collection)
-      );
-    });
+      )
+    })
   } catch (error) {
-    console.error(`无法读取SVG图标目录 ${SVG_BASE_DIR}:`, error);
+    console.error(`无法读取SVG图标目录 ${SVG_BASE_DIR}:`, error)
   }
-  return result;
+  return result
 }
 ```
 
@@ -817,98 +817,98 @@ npm i less sass postcss postcss-html postcss-less postcss-scss sass stylelint st
 export default {
   // stylelint-config-standard 基础配置
   // stylelint-config-recess-order 样式顺序
-  extends: ["stylelint-config-standard", "stylelint-config-recess-order"],
+  extends: ['stylelint-config-standard', 'stylelint-config-recess-order'],
   // 不同文件类型用不同解析器
   overrides: [
     {
-      files: ["**/*.(css|html|vue)"],
-      customSyntax: "postcss-html",
+      files: ['**/*.(css|html|vue)'],
+      customSyntax: 'postcss-html'
     },
     // 选less可以注释scss
     {
-      files: ["*.less", "**/*.less"],
-      customSyntax: "postcss-less",
+      files: ['*.less', '**/*.less'],
+      customSyntax: 'postcss-less'
     },
     // 选sass可以注释上面的less
     {
-      files: ["*.scss", "**/*.scss"],
-      customSyntax: "postcss-scss",
+      files: ['*.scss', '**/*.scss'],
+      customSyntax: 'postcss-scss',
       rule: {
-        "scss/percent-placeholder-pattern": null,
-        "scss/at-mixin-pattern": null,
-      },
-    },
+        'scss/percent-placeholder-pattern': null,
+        'scss/at-mixin-pattern': null
+      }
+    }
   ],
   rules: {
     // 'prettier/prettier': true,
-    "media-feature-range-notation": null,
-    "selector-not-notation": null,
-    "import-notation": null,
-    "function-no-unknown": null,
-    "selector-class-pattern": null,
-    "selector-pseudo-class-no-unknown": [
+    'media-feature-range-notation': null,
+    'selector-not-notation': null,
+    'import-notation': null,
+    'function-no-unknown': null,
+    'selector-class-pattern': null,
+    'selector-pseudo-class-no-unknown': [
       true,
       {
-        ignorePseudoClasses: ["global", "deep"],
-      },
+        ignorePseudoClasses: ['global', 'deep']
+      }
     ],
-    "selector-pseudo-element-no-unknown": [
+    'selector-pseudo-element-no-unknown': [
       true,
       {
-        ignorePseudoElements: ["v-deep", ":deep"],
-      },
+        ignorePseudoElements: ['v-deep', ':deep']
+      }
     ],
-    "at-rule-no-unknown": [
+    'at-rule-no-unknown': [
       true,
       {
         ignoreAtRules: [
-          "tailwind",
-          "apply",
-          "variants",
-          "responsive",
-          "screen",
-          "function",
-          "if",
-          "each",
-          "include",
-          "mixin",
-          "extend",
-          "use",
-        ],
-      },
+          'tailwind',
+          'apply',
+          'variants',
+          'responsive',
+          'screen',
+          'function',
+          'if',
+          'each',
+          'include',
+          'mixin',
+          'extend',
+          'use'
+        ]
+      }
     ],
-    "no-empty-source": null,
-    "named-grid-areas-no-invalid": null,
-    "no-descending-specificity": null,
-    "font-family-no-missing-generic-family-keyword": null,
-    "rule-empty-line-before": [
-      "always",
+    'no-empty-source': null,
+    'named-grid-areas-no-invalid': null,
+    'no-descending-specificity': null,
+    'font-family-no-missing-generic-family-keyword': null,
+    'rule-empty-line-before': [
+      'always',
       {
-        ignore: ["after-comment", "first-nested"],
-      },
+        ignore: ['after-comment', 'first-nested']
+      }
     ],
-    "unit-no-unknown": [true, { ignoreUnits: ["rpx"] }],
-    "order/order": [
+    'unit-no-unknown': [true, { ignoreUnits: ['rpx'] }],
+    'order/order': [
       [
-        "dollar-variables",
-        "custom-properties",
-        "at-rules",
-        "declarations",
+        'dollar-variables',
+        'custom-properties',
+        'at-rules',
+        'declarations',
         {
-          type: "at-rule",
-          name: "supports",
+          type: 'at-rule',
+          name: 'supports'
         },
         {
-          type: "at-rule",
-          name: "media",
+          type: 'at-rule',
+          name: 'media'
         },
-        "rules",
+        'rules'
       ],
-      { severity: "error" },
-    ],
+      { severity: 'error' }
+    ]
   },
-  ignoreFiles: ["**/*.js", "**/*.jsx", "**/*.tsx", "**/*.ts"],
-};
+  ignoreFiles: ['**/*.js', '**/*.jsx', '**/*.tsx', '**/*.ts']
+}
 ```
 
 ### 新增脚本
@@ -945,7 +945,7 @@ vite.config.ts 配置：
 
 ```typescript
 // gzip压缩
-import viteCompression from "vite-plugin-compression";
+import viteCompression from 'vite-plugin-compression'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -956,11 +956,11 @@ export default defineConfig({
       disable: false, // 开启压缩(不禁用)，默认即可
       deleteOriginFile: false, // 删除源文件
       threshold: 10240, // 压缩阈值，以字节为单位。如果一个资源比这个值小，它就不会被压缩。默认是 10240
-      algorithm: "gzip", // 压缩算法，默认是 gzip
-      ext: ".gz", // 文件类型，默认是 .gz
-    }),
-  ],
-});
+      algorithm: 'gzip', // 压缩算法，默认是 gzip
+      ext: '.gz' // 文件类型，默认是 .gz
+    })
+  ]
+})
 ```
 
 ## 自动引入
@@ -974,8 +974,8 @@ pnpm install -D unplugin-vue-components unplugin-auto-import
 vite.config.ts 配置：
 
 ```typescript
-import AutoImport from "unplugin-auto-import/vite";
-import Components from "unplugin-vue-components/vite";
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -991,12 +991,12 @@ export default defineConfig({
         //   }),
       ],
       imports: [
-        "vue", // 自动导入Vue核心API
-        "vue-router", // 自动导入Vue Router API
-        "pinia", // 自动导入Pinia API
+        'vue', // 自动导入Vue核心API
+        'vue-router', // 自动导入Vue Router API
+        'pinia' // 自动导入Pinia API
       ],
-      dts: "./types/auto-imports.d.ts", // 生成类型声明文件的路径
-      dirs: ["src/api/**/*.ts", "src/utils/**/*.ts"], // 自动导入项目中自定义的API和工具函数
+      dts: './types/auto-imports.d.ts', // 生成类型声明文件的路径
+      dirs: ['src/api/**/*.ts', 'src/utils/**/*.ts'] // 自动导入项目中自定义的API和工具函数
     }),
     Components({
       resolvers: [
@@ -1006,10 +1006,10 @@ export default defineConfig({
         //     importStyle: false, // 不导入CSS，使用CSS-in-JS方式
         //   }),
       ],
-      dts: "./types/components.d.ts", // 生成组件类型声明文件的路径
-    }),
-  ],
-});
+      dts: './types/components.d.ts' // 生成组件类型声明文件的路径
+    })
+  ]
+})
 ```
 
 ## 代码检查
@@ -1023,7 +1023,7 @@ pnpm i vite-plugin-checker -D
 vite.config.ts 配置：
 
 ```typescript
-import checker from "vite-plugin-checker";
+import checker from 'vite-plugin-checker'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -1034,15 +1034,15 @@ export default defineConfig({
         useFlatConfig: true,
         lintCommand: 'eslint "./src/**/*.{ts,tsx,vue}"',
         dev: {
-          logLevel: ["error"],
-        },
+          logLevel: ['error']
+        }
       },
       overlay: {
-        initialIsOpen: true,
-      },
-    }),
-  ],
-});
+        initialIsOpen: true
+      }
+    })
+  ]
+})
 ```
 
 ## 抽离插件
@@ -1106,22 +1106,22 @@ vite.config.ts 抽离出插件，打包配置 server 配置等复杂配置。
 
 ```typescript
 interface ImportMeta {
-  readonly env: ImportMetaEnv;
+  readonly env: ImportMetaEnv
 }
 
 interface ViteEnv {
-  VITE_APP_THEME_COLOR: string;
-  VITE_BASE_URL: string;
-  VITE_BASE_TARGET_URL: string;
-  VITE_VISUALIZER_OPEN: boolean;
-  VITE_BUILD_GZIP: boolean;
-  VITE_BUILD_VENDOR: boolean;
-  VITE_PROXY: any;
-  VITE_PORT: number;
+  VITE_APP_THEME_COLOR: string
+  VITE_BASE_URL: string
+  VITE_BASE_TARGET_URL: string
+  VITE_VISUALIZER_OPEN: boolean
+  VITE_BUILD_GZIP: boolean
+  VITE_BUILD_VENDOR: boolean
+  VITE_PROXY: any
+  VITE_PORT: number
 }
 
 interface ImportMetaEnv extends ViteEnv {
-  __: unknown;
+  __: unknown
 }
 ```
 
@@ -1131,31 +1131,31 @@ interface ImportMetaEnv extends ViteEnv {
 /* eslint-disable */
 // Read all environment variable configuration files to process.env
 export function wrapperEnv(envConf: any) {
-  const ret: any = {};
+  const ret: any = {}
 
   for (const envName of Object.keys(envConf)) {
-    let realName = envConf[envName].replace(/\\n/g, "\n");
+    let realName = envConf[envName].replace(/\\n/g, '\n')
     realName =
-      realName === "true" ? true : realName === "false" ? false : realName;
+      realName === 'true' ? true : realName === 'false' ? false : realName
 
-    if (envName === "VITE_PORT") {
-      realName = Number(realName);
+    if (envName === 'VITE_PORT') {
+      realName = Number(realName)
     }
-    if (envName === "VITE_PROXY" && realName) {
+    if (envName === 'VITE_PROXY' && realName) {
       try {
-        realName = JSON.parse(realName.replace(/'/g, '"'));
+        realName = JSON.parse(realName.replace(/'/g, '"'))
       } catch (error) {
-        realName = "";
+        realName = ''
       }
     }
-    ret[envName] = realName;
-    if (typeof realName === "string") {
-      process.env[envName] = realName;
-    } else if (typeof realName === "object") {
-      process.env[envName] = JSON.stringify(realName);
+    ret[envName] = realName
+    if (typeof realName === 'string') {
+      process.env[envName] = realName
+    } else if (typeof realName === 'object') {
+      process.env[envName] = JSON.stringify(realName)
     }
   }
-  return ret;
+  return ret
 }
 ```
 
@@ -1163,7 +1163,7 @@ export function wrapperEnv(envConf: any) {
 
 ```typescript
 const useViteBuild = (viteEnv: ViteEnv) => {
-  const { VITE_BUILD_VENDOR } = viteEnv;
+  const { VITE_BUILD_VENDOR } = viteEnv
 
   return {
     // 10kb以下，转Base64
@@ -1173,40 +1173,36 @@ const useViteBuild = (viteEnv: ViteEnv) => {
       output: {
         // 每个node_modules模块分成一个js文件
         manualChunks(id: string) {
-          if (id.includes("node_modules")) {
+          if (id.includes('node_modules')) {
             // return 'vendor'
             return VITE_BUILD_VENDOR
-              ? "vendor"
-              : id
-                  .toString()
-                  .split("node_modules/")[2]
-                  .split("/")[0]
-                  .toString();
+              ? 'vendor'
+              : id.toString().split('node_modules/')[2].split('/')[0].toString()
           }
           // return 'vendor'
         },
         // 用于从入口点创建的块的打包输出格式[name]表示文件名,[hash]表示该文件内容hash值
-        entryFileNames: "assets/js/[name].[hash].js", // 用于命名代码拆分时创建的共享块的输出命名
-        chunkFileNames: "assets/js/[name].[hash].js", // 用于输出静态资源的命名，[ext]表示文件扩展名
-        assetFileNames: "assets/[ext]/[name].[hash].[ext]",
-      },
-    },
-  };
-};
+        entryFileNames: 'assets/js/[name].[hash].js', // 用于命名代码拆分时创建的共享块的输出命名
+        chunkFileNames: 'assets/js/[name].[hash].js', // 用于输出静态资源的命名，[ext]表示文件扩展名
+        assetFileNames: 'assets/[ext]/[name].[hash].[ext]'
+      }
+    }
+  }
+}
 
-export default useViteBuild;
+export default useViteBuild
 ```
 
 > build/server.ts
 
 ```typescript
 // 服务器选项
-import useProxy from "./proxy";
+import useProxy from './proxy'
 
 export function useServer(viteEnv: ViteEnv) {
   return {
     // 监听所有公共ip
-    host: "0.0.0.0",
+    host: '0.0.0.0',
     // cors: true,
     hmr: true,
     port: viteEnv.VITE_PORT,
@@ -1215,9 +1211,9 @@ export function useServer(viteEnv: ViteEnv) {
     warmup: {
       // 请注意，只应该预热频繁使用的文件，以免在启动时过载 Vite 开发服务器
       // 可以通过运行 npx vite --debug transform 并检查日志来找到频繁使用的文件
-      clientFiles: ["./index.html", "./src/{components,api}/*"],
-    },
-  };
+      clientFiles: ['./index.html', './src/{components,api}/*']
+    }
+  }
 }
 ```
 
@@ -1227,35 +1223,35 @@ export function useServer(viteEnv: ViteEnv) {
 /**
  * Used to parse the .env.development proxy configuration
  */
-import type { ProxyOptions } from "vite";
+import type { ProxyOptions } from 'vite'
 
-type ProxyItem = [string, string];
+type ProxyItem = [string, string]
 
-type ProxyList = ProxyItem[];
+type ProxyList = ProxyItem[]
 
-type ProxyTargetList = Record<string, ProxyOptions>;
+type ProxyTargetList = Record<string, ProxyOptions>
 
-const httpsRE = /^https:\/\//;
+const httpsRE = /^https:\/\//
 
 /**
  * Generate proxy
  * @param list
  */
 export default function useProxy(list: ProxyList = []) {
-  const ret: ProxyTargetList = {};
+  const ret: ProxyTargetList = {}
   for (const [prefix, target] of list) {
-    const isHttps = httpsRE.test(target);
+    const isHttps = httpsRE.test(target)
     // https://github.com/http-party/node-http-proxy#options
     ret[prefix] = {
       target,
       changeOrigin: true,
       ws: true,
-      rewrite: (path) => path.replace(new RegExp(`^${prefix}`), "/api"),
+      rewrite: (path) => path.replace(new RegExp(`^${prefix}`), '/api'),
       // https is require secure=false
-      ...(isHttps ? { secure: false } : {}),
-    };
+      ...(isHttps ? { secure: false } : {})
+    }
   }
-  return ret;
+  return ret
 }
 ```
 
@@ -1268,7 +1264,7 @@ export default function useProxy(list: ProxyList = []) {
   ```typescript
   // 此插件用于自动导入API和组件
   // 可以减少手动import语句，提高开发效率，并提供类型提示
-  import AutoImport from "unplugin-auto-import/vite";
+  import AutoImport from 'unplugin-auto-import/vite'
   // import { ElementPlusResolver, AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
   // import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 
@@ -1289,20 +1285,21 @@ export default function useProxy(list: ProxyList = []) {
         //   }),
       ],
       imports: [
-        "vue", // 自动导入Vue核心API
-        "vue-router", // 自动导入Vue Router API
-        "pinia", // 自动导入Pinia API
+        'vue', // 自动导入Vue核心API
+        'vue-router', // 自动导入Vue Router API
+        'pinia' // 自动导入Pinia API
         //   '@vueuse/core', // 自动导入VueUse工具函数
         //   {
         //     'vue-request': ['useRequest', 'usePagination'], // 自动导入vue-request的特定函数
         //     // 'dayjs': [['default', 'dayjs']],
         //   },
       ],
-      dts: "./types/auto-imports.d.ts", // 生成类型声明文件的路径
-      dirs: ["src/api/**/*.ts", "src/utils/**/*.ts"], // 自动导入项目中自定义的API和工具函数
-    });
-  };
-  export default useAutoImport;
+      dts: './types/auto-imports.d.ts', // 生成类型声明文件的路径
+      dirs: ['src/api/**/*.ts', 'src/utils/**/*.ts'] // 自动导入项目中自定义的API和工具函数
+    })
+  }
+
+  export default useAutoImport
   ```
 
 - 抽离代码检查：
@@ -1311,7 +1308,7 @@ export default function useProxy(list: ProxyList = []) {
 
   ```typescript
   // vite.config.ts
-  import checker from "vite-plugin-checker";
+  import checker from 'vite-plugin-checker'
   /**
    * vite-plugin-checker 配置
    * 用于在开发环境下进行代码检查
@@ -1333,13 +1330,13 @@ export default function useProxy(list: ProxyList = []) {
         useFlatConfig: true,
         lintCommand: 'eslint "./src/**/*.{ts,tsx,vue}"',
         dev: {
-          logLevel: ["error"],
-        },
+          logLevel: ['error']
+        }
       },
       overlay: {
-        initialIsOpen: true,
-      },
-    });
+        initialIsOpen: true
+      }
+    })
   }
   ```
 
@@ -1350,14 +1347,14 @@ export default function useProxy(list: ProxyList = []) {
   ```typescript
   // import { ElementPlusResolver, AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
   // import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
-  import Components from "unplugin-vue-components/vite";
+  import Components from 'unplugin-vue-components/vite'
 
   /**
    * 自动注册Vue组件的插件配置
    * 该插件可以自动导入组件，无需手动import
    * 提高开发效率并减少样板代码
    */
-  constuseComponents = () => {
+  const useComponents = () => {
     return Components({
       resolvers: [
         //   ElementPlusResolver(), // Element Plus组件库解析器（已禁用）
@@ -1366,11 +1363,11 @@ export default function useProxy(list: ProxyList = []) {
         //     importStyle: false, // 不导入CSS，使用CSS-in-JS方式
         //   }),
       ],
-      dts: "./types/components.d.ts", // 生成组件类型声明文件的路径
-    });
-  };
+      dts: './types/components.d.ts' // 生成组件类型声明文件的路径
+    })
+  }
 
-  export default useComponents;
+  export default useComponents
   ```
 
 - 抽离压缩：
@@ -1378,7 +1375,7 @@ export default function useProxy(list: ProxyList = []) {
   > build/plugins/compress.ts：
 
   ```typescript
-  import viteCompression from "vite-plugin-compression";
+  import viteCompression from 'vite-plugin-compression'
   /**
    *  开启gzip压缩
    */
@@ -1388,12 +1385,12 @@ export default function useProxy(list: ProxyList = []) {
       disable: false, // 开启压缩(不禁用)，默认即可
       deleteOriginFile: false, // 删除源文件
       threshold: 10240, // 压缩前最小文件大小
-      algorithm: "gzip", // 压缩算法
-      ext: ".gz", // 文件类型
-    });
-  };
+      algorithm: 'gzip', // 压缩算法
+      ext: '.gz' // 文件类型
+    })
+  }
 
-  export default useCompress;
+  export default useCompress
   ```
 
 - 抽离 DevTools：
@@ -1401,7 +1398,7 @@ export default function useProxy(list: ProxyList = []) {
   > build/plugins/devTools.ts：
 
   ```typescript
-  import VueDevTools from "vite-plugin-vue-devtools";
+  import VueDevTools from 'vite-plugin-vue-devtools'
   /**
    *  开启DevTools
    */
@@ -1409,66 +1406,66 @@ export default function useProxy(list: ProxyList = []) {
     return VueDevTools({
       componentInspector: {
         // 如果是windows 'control-shift' , 如果是macOS 'meta-shift'
-        toggleComboKey: "control-shift",
-      },
-    });
-  };
+        toggleComboKey: 'control-shift'
+      }
+    })
+  }
 
-  export default useVueDevTools;
+  export default useVueDevTools
   ```
 
 > vite.config.ts
 
 ```typescript
-import { fileURLToPath, URL } from "node:url";
-import { defineConfig, loadEnv } from "vite";
+import { fileURLToPath, URL } from 'node:url'
+import { defineConfig, loadEnv } from 'vite'
 
 // 自动引入样式
-import useViteBuild from "./build/build";
-import useVitePlugins from "./build/plugins";
-import { useServer } from "./build/server";
-import { wrapperEnv } from "./build/utils";
+import useViteBuild from './build/build'
+import useVitePlugins from './build/plugins'
+import { useServer } from './build/server'
+import { wrapperEnv } from './build/utils'
 
 // https://vite.dev/config/
 export default defineConfig(({ command, mode }) => {
   // 模式
-  const isBuild = command === "build";
+  const isBuild = command === 'build'
   // 获取当前文件夹地址 current working directory
-  const root = process.cwd();
+  const root = process.cwd()
   // 读取包含VITE_开头的环境变量
-  const env = loadEnv(mode, root);
+  const env = loadEnv(mode, root)
   // 环境变量值转换
-  const viteEnv = wrapperEnv(env);
+  const viteEnv = wrapperEnv(env)
   return {
-    base: env.VITE_BASE_URL || "/",
+    base: env.VITE_BUILD_URL || '/',
     plugins: useVitePlugins(isBuild, viteEnv),
     build: useViteBuild(viteEnv),
     server: useServer(viteEnv),
     resolve: {
       alias: {
-        "@": fileURLToPath(new URL("./src", import.meta.url)),
-        "#": fileURLToPath(new URL("./types", import.meta.url)),
-      },
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+        '#': fileURLToPath(new URL('./types', import.meta.url))
+      }
     },
     css: {
       // 预加载
       preprocessorOptions: {
         // 全局样式变量预注入
         scss: {
-          api: "modern-compiler", // or "modern", "legacy"
+          api: 'modern-compiler', // or "modern", "legacy"
           additionalData: `
             @use "@/styles/variables.scss" as *;
             @use "@/styles/mixin.scss" as *;
           `,
           globalVars: {
-            "theme-color": env.VITE_APP_THEME_COLOR,
-            "split-line": "#ECEFF8",
-          },
-        },
-      },
-    },
-  };
-});
+            'theme-color': env.VITE_APP_THEME_COLOR,
+            'split-line': '#ECEFF8'
+          }
+        }
+      }
+    }
+  }
+})
 ```
 
 ## 代码提交检查
@@ -1526,12 +1523,12 @@ pnpm i lint-staged -D
 ```js
 /**  @type {import('lint-staged').Config} */
 export default {
-  "*.{js,jsx,ts,tsx}": ["eslint --fix"],
-  "*.json": ["eslint --fix"],
-  "*.vue": ["eslint --fix"],
-  "*.{scss,less,styl,html}": ["stylelint --fix --allow-empty-input"],
-  "*.md": ["prettier --write"],
-};
+  '*.{js,jsx,ts,tsx}': ['eslint --fix'],
+  '*.json': ['eslint --fix'],
+  '*.vue': ['eslint --fix'],
+  '*.{scss,less,styl,html}': ['stylelint --fix --allow-empty-input'],
+  '*.md': ['prettier --write']
+}
 ```
 
 3. 添加指令
@@ -1577,34 +1574,34 @@ pnpm i @commitlint/cli @commitlint/config-conventional -D
 ```js
 /** @type {import("@commitlint/types").UserConfig} */
 export default {
-  ignores: [(commit) => commit.includes("init")],
-  extends: ["@commitlint/config-conventional"],
+  ignores: [(commit) => commit.includes('init')],
+  extends: ['@commitlint/config-conventional'],
   rules: {
-    "body-leading-blank": [2, "always"],
-    "footer-leading-blank": [1, "always"],
-    "header-max-length": [2, "always", 108],
-    "subject-empty": [2, "never"],
-    "type-empty": [2, "never"],
-    "subject-case": [0],
-    "type-enum": [
+    'body-leading-blank': [2, 'always'],
+    'footer-leading-blank': [1, 'always'],
+    'header-max-length': [2, 'always', 108],
+    'subject-empty': [2, 'never'],
+    'type-empty': [2, 'never'],
+    'subject-case': [0],
+    'type-enum': [
       2,
-      "always",
+      'always',
       [
-        "feat", // 新增功能
-        "fix", // 修复缺陷
-        "docs", // 文档变更
-        "style", // 代码格式（不影响功能，例如空格、分号等格式修正）
-        "refactor", // 代码重构（不包括 bug 修复、功能新增）
-        "perf", // 性能优化
-        "test", // 添加疏漏测试或已有测试改动
-        "build", // 构建流程、外部依赖变更（如升级 npm 包、修改 webpack 配置等）
-        "ci", // 修改 CI 配置、脚本
-        "revert", // 回滚 commit
-        "chore", // 对构建过程或辅助工具和库的更改（不影响源文件、测试用例）
-      ],
-    ],
-  },
-};
+        'feat', // 新增功能
+        'fix', // 修复缺陷
+        'docs', // 文档变更
+        'style', // 代码格式（不影响功能，例如空格、分号等格式修正）
+        'refactor', // 代码重构（不包括 bug 修复、功能新增）
+        'perf', // 性能优化
+        'test', // 添加疏漏测试或已有测试改动
+        'build', // 构建流程、外部依赖变更（如升级 npm 包、修改 webpack 配置等）
+        'ci', // 修改 CI 配置、脚本
+        'revert', // 回滚 commit
+        'chore' // 对构建过程或辅助工具和库的更改（不影响源文件、测试用例）
+      ]
+    ]
+  }
+}
 ```
 
 3. 执行下面命令生成 `commint-msg` 钩子用于 git 提交信息校验
