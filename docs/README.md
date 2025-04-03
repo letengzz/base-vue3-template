@@ -1608,7 +1608,7 @@ npx 命令会自动执行安装过的 lint-staged 插件，从而执行 lint-sta
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npm run lint:lint-staged --allow-empty
+pnpm run lint:lint-staged --allow-empty
 ```
 
 ![image-20240207143016869](https://cdn.jsdelivr.net/gh/LetengZzz/img@main/img/202504022113919.png)
