@@ -601,7 +601,7 @@ export default defineConfig({
         ...loadLocalSvgCollections(),
         // 按需加载的图标集合 非必须
         // 'ant-design': () => import('@iconify-json/ant-design/icons.json').then(i => i.default),
-        ep: () => import('@iconify-json/ep/icons.json').then((i) => i.default)
+        ep: () => import('@iconify-json/ep/icons.json').then(i => i.default)
       }
     })
   ],
@@ -686,11 +686,12 @@ function generateSafeList(collections: string[]) {
       if (fs.existsSync(dirPath) && fs.statSync(dirPath).isDirectory()) {
         const files = fs.readdirSync(dirPath)
         const icons = files
-          .filter((file) => file.endsWith('.svg'))
-          .map((file) => `i-${collection}-${path.basename(file, '.svg')}`)
+          .filter(file => file.endsWith('.svg'))
+          .map(file => `i-${collection}-${path.basename(file, '.svg')}`)
         safeList.push(...icons)
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.error(`无法读取图标集合 ${collection}:`, error)
     }
   })
@@ -718,7 +719,8 @@ function loadLocalSvgCollections() {
         path.join(SVG_BASE_DIR, collection)
       )
     })
-  } catch (error) {
+  }
+  catch (error) {
     console.error(`无法读取SVG图标目录 ${SVG_BASE_DIR}:`, error)
   }
   return result
@@ -744,21 +746,21 @@ import 'virtual:uno.css' // 引入 uno.css
   <div>
     <h1>UnoCSS</h1>
     <div class="box" />
-    <hr />
+    <hr>
     <div class="h-100 w-100 bg-red-800 text-30 text-blue hover:text-black">
       小猫米
     </div>
-    <hr />
+    <hr>
     <div class="box2">小猫咪</div>
-    <hr />
+    <hr>
     <div mt10 h100 w100 bg-bluegray py20 text-fuchsia>小猫咪</div>
-    <hr />
+    <hr>
     <div class="wrap" h100 w200 flex-center gap10>
       <div h20 w20 bg-blue />
       <div h20 w20 bg-blue />
       <div h20 w20 bg-blue />
     </div>
-    <hr />
+    <hr>
     <div i-ep:dish />
     <i i-ep:switch-button block h100 w100 />
   </div>
@@ -1246,7 +1248,7 @@ export default function useProxy(list: ProxyList = []) {
       target,
       changeOrigin: true,
       ws: true,
-      rewrite: (path) => path.replace(new RegExp(`^${prefix}`), '/api'),
+      rewrite: path => path.replace(new RegExp(`^${prefix}`), '/api'),
       // https is require secure=false
       ...(isHttps ? { secure: false } : {})
     }
@@ -1574,7 +1576,7 @@ pnpm i @commitlint/cli @commitlint/config-conventional -D
 ```js
 /** @type {import("@commitlint/types").UserConfig} */
 export default {
-  ignores: [(commit) => commit.includes('init')],
+  ignores: [commit => commit.includes('init')],
   extends: ['@commitlint/config-conventional'],
   rules: {
     'body-leading-blank': [2, 'always'],
