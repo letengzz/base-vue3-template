@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useCounterStore } from '@/stores/counter'
+import { PoweroffOutlined } from '@ant-design/icons-vue'
 import { ref } from 'vue'
 
 const counter = useCounterStore()
@@ -34,7 +35,20 @@ const a = ref('a')
   <div :class="`i-menu-${a}`" h50 w50 />
   <!-- element icon 需要引入 element图标 -->
   <div class="i-ep:cherry" h50 w50 />
+  <div class="i-ant-design:poweroff-outlined" h50 w50 />
   <div :class="cherry" h50 w50 />
+  <a-space wrap>
+    <a-button type="primary">
+      <template #icon><PoweroffOutlined /></template>
+      Primary Button
+    </a-button>
+    <a-button>
+      Default Button
+    </a-button>
+    <a-button type="dashed">Dashed Button</a-button>
+    <a-button type="text">Text Button</a-button>
+    <a-button type="link">Link Button</a-button>
+  </a-space>
 </template>
 
 <style>

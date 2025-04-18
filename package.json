@@ -23,6 +23,8 @@
     "cz": "git-cz"
   },
   "dependencies": {
+    "@ant-design/icons-vue": "^7.0.1",
+    "ant-design-vue": "4.x",
     "axios": "^1.8.4",
     "pinia": "^3.0.1",
     "pinia-plugin-persistedstate": "^4.2.0",

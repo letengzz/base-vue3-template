@@ -12,6 +12,7 @@ import useChecker from './checker' // 代码检查工具
 import useComponents from './component' // 组件自动注册
 import useCompress from './compress' // 压缩相关插件
 import useVueDevTools from './devTools' // Vue开发者工具
+import useIcons from './icon'
 import useUnocss from './unocss' // 原子化CSS工具
 
 /**
@@ -30,6 +31,7 @@ const useVitePlugins = (isBuild: boolean, viteEnv: ViteEnv) => {
   plugins.push(useUnocss())
   plugins.push(useAutoImport())
   plugins.push(useComponents())
+  plugins.push(useIcons())
 
   if (!isBuild) {
     plugins.push(useVueDevTools())
