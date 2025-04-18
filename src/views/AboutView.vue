@@ -35,6 +35,20 @@ const a = ref('a')
   <!-- element icon 需要引入 element图标 -->
   <div class="i-ep:cherry" h50 w50 />
   <div :class="cherry" h50 w50 />
+  <div class="mb-4">
+    <el-button>Default</el-button>
+    <el-button type="primary">
+      <template #icon>
+        <!-- <i-ep:edit /> -->
+        <i-ant-design:check-outlined />
+      </template>
+      Primary
+    </el-button>
+    <el-button type="success">Success</el-button>
+    <el-button type="info">Info</el-button>
+    <el-button type="warning">Warning</el-button>
+    <el-button type="danger">Danger</el-button>
+  </div>
 </template>
 
 <style>
