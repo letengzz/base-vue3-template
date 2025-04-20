@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import SysDialog from '@/components/SysDialog/SysDialog.vue'
+import useDialog from '@/hooks/useDialog'
+
 import { useCounterStore } from '@/stores/counter'
 import { ref } from 'vue'
 
@@ -7,6 +10,8 @@ const counter = useCounterStore()
 const cherry = ref('i-ep:cherry')
 
 const a = ref('a')
+// 弹窗属性
+const { dialog, onClose, onShow, onConfirm } = useDialog()
 </script>
 
 <template>
@@ -49,6 +54,15 @@ const a = ref('a')
     <el-button type="warning">Warning</el-button>
     <el-button type="danger">Danger</el-button>
   </div>
+  <el-button type="primary" size="default" @click="onShow()">显示</el-button>
+  <SysDialog
+    :height="dialog.height" :title="dialog.title" :width="dialog.width" :visible="dialog.visible"
+    @on-close="onClose" @on-confirm="onConfirm()"
+  >
+    <template #content>
+      测试
+    </template>
+  </SysDialog>
 </template>
 
 <style>
