@@ -24,7 +24,7 @@ export default function useProxy(list: ProxyList = []) {
       target,
       changeOrigin: true,
       ws: true,
-      rewrite: path => path.replace(new RegExp(`^${prefix}`), '/api'),
+      rewrite: path => path.replace(new RegExp(`^${prefix}`), ''),
       // https is require secure=false
       ...(isHttps ? { secure: false } : {}),
     }
