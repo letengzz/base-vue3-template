@@ -16,7 +16,7 @@ interface Result<T> {
   data: T
 }
 const config = {
-  baseURL: '/api', // 请求接口的地址
+  baseURL: import.meta.env.VITE_API_URL, // 请求接口的地址
   timeout: 10000,
 }
 
