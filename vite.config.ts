@@ -18,7 +18,7 @@ export default defineConfig(({ command, mode }) => {
   // 环境变量值转换
   const viteEnv = wrapperEnv(env)
   return {
-    base: env.VITE_BUILD_URL || '/',
+    base: env.VITE_BASE_URL || '/',
     plugins: useVitePlugins(isBuild, viteEnv),
     build: useViteBuild(viteEnv),
     server: useServer(viteEnv),

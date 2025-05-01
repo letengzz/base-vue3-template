@@ -5,6 +5,7 @@ interface ImportMeta {
 interface ViteEnv {
   VITE_APP_THEME_COLOR: string
   VITE_BASE_URL: string
+  VITE_API_URL: string
   VITE_BASE_TARGET_URL: string
   VITE_VISUALIZER_OPEN: boolean
   VITE_BUILD_GZIP: boolean
