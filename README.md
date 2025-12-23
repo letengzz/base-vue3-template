@@ -2,23 +2,7 @@
 
 ## 目录
 
-1. [项目概述](#1-项目概述)
-2. [项目结构](#2-项目结构)
-3. [快速开始](#3-快速开始)
-4. [核心功能详解](#4-核心功能详解)
-   - [4.1 状态管理（Pinia）](#41-状态管理pinia)
-   - [4.2 路由系统（Vue Router）](#42-路由系统vue-router)
-   - [4.3 HTTP请求封装](#43-http请求封装)
-   - [4.4 API模块化组织](#44-api模块化组织)
-   - [4.5 类型定义](#45-类型定义)
-5. [配置说明](#5-配置说明)
-   - [5.1 环境变量](#51-环境变量)
-   - [5.2 Vite配置](#52-vite配置)
-   - [5.3 构建配置](#53-构建配置)
-6. [开发规范](#6-开发规范)
-7. [测试](#7-测试)
-8. [构建部署](#8-构建部署)
-9. [常见问题](#9-常见问题)
+[TOC]
 
 ---
 
@@ -31,6 +15,7 @@
 - **Vue 3.5** - 渐进式JavaScript框架
 - **TypeScript 5.8** - 类型安全的JavaScript超集
 - **Vite 6** - 下一代前端构建工具
+- **Element Plus 2.11** - Vue 3 UI组件库
 - **Pinia 3** - Vue状态管理库
 - **Vue Router 4** - 官方路由管理器
 - **Axios 1.12** - HTTP客户端库
@@ -43,7 +28,8 @@
 
 - **模块化架构** - 清晰的目录结构，便于代码组织和维护
 - **类型安全** - 全面的TypeScript支持，减少运行时错误
-- **自动化API** - 使用unplugin-auto-import自动导入Vue API
+- **自动化导入** - 使用unplugin-auto-import和unplugin-vue-components自动导入Vue API和组件
+- **Element Plus集成** - 内置Element Plus组件库，支持自动导入
 - **代码规范** - 集成ESLint和Prettier，保证代码质量
 - **高性能构建** - 优化的Vite配置，支持代码分割和压缩
 - **持久化存储** - Pinia状态持久化支持
@@ -56,8 +42,6 @@
 
 ```
 base-vue3-template/
-├── .trae/                    # Trae IDE配置
-│   └── documents/            # 项目文档
 ├── config/                   # Vite配置文件
 │   ├── plugins/              # Vite插件配置
 │   │   ├── index.ts          # 插件入口
@@ -208,11 +192,298 @@ pnpm test:e2e
 
 ## 4. 核心功能详解
 
-### 4.1 状态管理（Pinia）
+### 4.1 UI组件库（Element Plus）
+
+本项目集成了 Element Plus 作为 UI 组件库，提供了丰富的 Vue 3 组件。通过 `unplugin-vue-components` 实现了组件的自动导入，无需手动 import 即可使用。
+
+#### 4.1.1 配置文件
+
+**组件自动导入配置** (`config/plugins/component.ts`)
+
+```typescript
+import Components from 'unplugin-vue-components/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+
+const useComponents = () => {
+  return Components({
+    resolvers: [ElementPlusResolver()],
+    dts: './types/components.d.ts',
+  })
+}
+
+export default useComponents
+```
+
+**API自动导入配置** (`config/plugins/autoImport.ts`)
+
+```typescript
+import AutoImport from 'unplugin-auto-import/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+
+const useAutoImport = () => {
+  return AutoImport({
+    resolvers: [ElementPlusResolver()],
+    imports: ['vue', 'vue-router', 'pinia'],
+    dts: './types/auto-imports.d.ts',
+    dirs: ['src/api/backend/**/*.ts', 'src/utils/**/*.ts'],
+  })
+}
+
+export default useAutoImport
+```
+
+#### 4.1.2 在组件中使用Element Plus
+
+```vue
+<template>
+  <div class="example-container">
+    <el-button>默认按钮</el-button>
+    <el-button type="primary">主要按钮</el-button>
+    <el-button type="success">成功按钮</el-button>
+    <el-button type="info">信息按钮</el-button>
+    <el-button type="warning">警告按钮</el-button>
+    <el-button type="danger">危险按钮</el-button>
+  </div>
+
+  <el-card class="box-card">
+    <template #header>
+      <div class="card-header">
+        <span>卡片标题</span>
+        <el-button type="primary">操作按钮</el-button>
+      </div>
+    </template>
+    <div v-for="o in 4" :key="o" class="text item">
+      {{ '列表内容 ' + o }}
+    </div>
+  </el-card>
+
+  <el-dialog v-model="dialogVisible" title="提示" width="30%">
+    <span>这是一段信息</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确定</el-button>
+      </span>
+    </template>
+  </el-dialog>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const dialogVisible = ref(false)
+</script>
+
+<style scoped>
+.example-container {
+  padding: 20px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text {
+  font-size: 14px;
+}
+
+.item {
+  padding: 18px 0;
+}
+</style>
+```
+
+#### 4.1.3 常用组件示例
+
+```vue
+<template>
+  <!-- 表单组件 -->
+  <el-form :model="form" :rules="rules" label-width="120px">
+    <el-form-item label="活动名称">
+      <el-input v-model="form.name" />
+    </el-form-item>
+    <el-form-item label="活动区域">
+      <el-select v-model="form.region" placeholder="请选择活动区域">
+        <el-option label="区域一" value="shanghai" />
+        <el-option label="区域二" value="beijing" />
+      </el-select>
+    </el-form-item>
+    <el-form-item label="活动时间">
+      <el-date-picker v-model="form.date" type="date" placeholder="选择日期" />
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="submitForm">提交</el-button>
+      <el-button @click="resetForm">重置</el-button>
+    </el-form-item>
+  </el-form>
+
+  <!-- 表格组件 -->
+  <el-table :data="tableData" style="width: 100%">
+    <el-table-column prop="date" label="日期" width="180" />
+    <el-table-column prop="name" label="姓名" width="180" />
+    <el-table-column prop="address" label="地址" />
+    <el-table-column label="操作">
+      <template #default="scope">
+        <el-button size="small" @click="handleEdit(scope.row)"> 编辑 </el-button>
+        <el-button size="small" type="danger" @click="handleDelete(scope.row)"> 删除 </el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+
+  <!-- 分页组件 -->
+  <el-pagination
+    v-model:current-page="currentPage"
+    v-model:page-size="pageSize"
+    :page-sizes="[100, 200, 300, 400]"
+    :total="total"
+    layout="total, sizes, prev, pager, next, jumper"
+    @size-change="handleSizeChange"
+    @current-change="handleCurrentChange"
+  />
+
+  <!-- 消息提示 -->
+  <el-button @click="showSuccess">成功提示</el-button>
+  <el-button @click="showError">错误提示</el-button>
+  <el-button @click="showWarning">警告提示</el-button>
+</template>
+
+<script setup lang="ts">
+import { ref, reactive } from 'vue'
+import { ElMessage } from 'element-plus'
+
+const currentPage = ref(1)
+const pageSize = ref(100)
+const total = ref(400)
+
+const form = reactive({
+  name: '',
+  region: '',
+  date: '',
+})
+
+const rules = {
+  name: [
+    { required: true, message: '请输入活动名称', trigger: 'blur' },
+    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' },
+  ],
+  region: [{ required: true, message: '请选择活动区域', trigger: 'change' }],
+  date: [{ required: true, message: '请选择日期', trigger: 'change' }],
+}
+
+const tableData = [
+  { date: '2023-12-01', name: '张三', address: '北京市朝阳区' },
+  { date: '2023-12-02', name: '李四', address: '上海市浦东新区' },
+  { date: '2023-12-03', name: '王五', address: '广州市天河区' },
+]
+
+function submitForm() {
+  console.log('提交表单', form)
+}
+
+function resetForm() {
+  Object.keys(form).forEach((key) => {
+    form[key as keyof typeof form] = ''
+  })
+}
+
+function handleEdit(row: any) {
+  console.log('编辑行', row)
+}
+
+function handleDelete(row: any) {
+  console.log('删除行', row)
+}
+
+function handleSizeChange(val: number) {
+  console.log(`每页 ${val} 条`)
+}
+
+function handleCurrentChange(val: number) {
+  console.log(`当前页: ${val}`)
+}
+
+function showSuccess() {
+  ElMessage.success('操作成功')
+}
+
+function showError() {
+  ElMessage.error('操作失败')
+}
+
+function showWarning() {
+  ElMessage.warning('警告信息')
+}
+</script>
+```
+
+#### 4.1.4 图标使用
+
+```vue
+<template>
+  <el-button :icon="Search">搜索</el-button>
+  <el-button :icon="Edit">编辑</el-button>
+  <el-button :icon="Delete">删除</el-button>
+  <el-button :icon="Share">分享</el-button>
+
+  <el-icon><Search /></el-icon>
+  <el-icon><Edit /></el-icon>
+  <el-icon><Delete /></el-icon>
+</template>
+
+<script setup lang="ts">
+import { Search, Edit, Delete, Share } from '@element-plus/icons-vue'
+</script>
+```
+
+#### 4.1.5 全局配置
+
+Element Plus 支持全局配置，可以在 `main.ts` 中添加配置：
+
+```typescript
+import { createApp } from 'vue'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+import { useRouter } from './router'
+import { usePinia } from './stores'
+import App from './App.vue'
+
+const app = createApp(App)
+
+app.use(ElementPlus, { size: 'default', zIndex: 3000 })
+
+useRouter(app)
+usePinia(app)
+
+app.mount('#app')
+```
+
+#### 4.1.6 组件类型声明
+
+自动生成的组件类型声明文件位于 `types/components.d.ts`：
+
+```typescript
+declare module 'vue' {
+  export interface GlobalComponents {
+    ElButton: (typeof import('element-plus/es'))['ElButton']
+    ElCard: (typeof import('element-plus/es'))['ElCard']
+    ElDialog: (typeof import('element-plus/es'))['ElDialog']
+    ElForm: (typeof import('element-plus/es'))['ElForm']
+    ElInput: (typeof import('element-plus/es'))['ElInput']
+    ElTable: (typeof import('element-plus/es'))['ElTable']
+    // ... 更多组件
+    RouterLink: (typeof import('vue-router'))['RouterLink']
+    RouterView: (typeof import('vue-router'))['RouterView']
+  }
+}
+```
+
+### 4.2 状态管理（Pinia）
 
 本项目使用 Pinia 作为状态管理库，并集成了持久化插件 `pinia-plugin-persistedstate`，支持状态自动保存到本地存储。
 
-#### 4.1.1 Store 基本结构
+#### 4.2.1 Store 基本结构
 
 ```
 src/stores/
@@ -1523,7 +1794,3 @@ server {
 | `vitest.config.ts`     | Vitest配置     |
 | `playwright.config.ts` | Playwright配置 |
 
----
-
-_文档生成时间: 2025-01-21_
-_项目版本: 0.0.0_
