@@ -18,6 +18,7 @@
 - **Pinia 3** - Vue状态管理库
 - **Vue Router 4** - 官方路由管理器
 - **Axios 1.12** - HTTP客户端库
+- **TDesign 1.17** - 腾讯企业级UI组件库
 - **Vitest** - 单元测试框架
 - **Playwright** - E2E测试框架
 - **ESLint 9** - 代码质量检查工具
@@ -1068,6 +1069,272 @@ type ProductResponse = ApiResponse<ProductListResponse>
 
 ---
 
+### 4.6 TDesign 组件库
+
+本项目集成了 [TDesign](https://tdesign.tencent.com/vue-next) 腾讯企业级UI组件库，提供了丰富的Vue 3组件。
+
+#### 4.6.1 技术特性
+
+- **企业级设计规范** - 腾讯官方设计规范
+- **完整的组件生态** - 70+ 基础和业务组件
+- **TypeScript 支持** - 完整的类型定义
+- **按需加载** - 自动按需导入组件，减少包体积
+
+#### 4.6.2 已集成插件
+
+- `tdesign-vue-next` - TDesign 组件库
+- `unplugin-vue-components` - 组件自动导入插件
+- `unplugin-vue-components/resolvers` - TDesign 解析器
+
+配置文件位置：`config/plugins/component.ts`
+
+#### 4.6.3 使用示例
+
+由于配置了组件自动导入，可以直接在模板中使用 TDesign 组件，无需手动 import：
+
+```vue
+<template>
+  <div class="tdesign-demo">
+    <t-button variant="base">基础按钮</t-button>
+    <t-button variant="outline">描边按钮</t-button>
+    <t-button variant="dashed">虚线按钮</t-button>
+    <t-button variant="text">文字按钮</t-button>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const value = ref('')
+const date = ref('')
+const options = ref([
+  { label: '选项一', value: '1' },
+  { label: '选项二', value: '2' },
+  { label: '选项三', value: '3' },
+])
+</script>
+```
+
+#### 4.6.4 常用组件示例
+
+**按钮组件**
+
+```vue
+<template>
+  <t-button theme="primary">主要按钮</t-button>
+  <t-button theme="default">默认按钮</t-button>
+  <t-button theme="danger">危险按钮</t-button>
+  <t-button theme="warning">警告按钮</t-button>
+  <t-button :loading="loading" @click="handleClick">加载按钮</t-button>
+  <t-button disabled>禁用按钮</t-button>
+</template>
+
+<script setup lang="ts">
+const loading = ref(false)
+
+function handleClick() {
+  loading.value = true
+  setTimeout(() => {
+    loading.value = false
+  }, 2000)
+}
+</script>
+```
+
+**输入框组件**
+
+```vue
+<template>
+  <t-input v-model="value" placeholder="请输入内容" clearable :maxlength="50" show-limit-meter />
+
+  <t-textarea v-model="textareaValue" placeholder="多行文本" :maxlength="200" show-limit-meter />
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const value = ref('')
+const textareaValue = ref('')
+</script>
+```
+
+**选择器组件**
+
+```vue
+<template>
+  <t-select v-model="selectedValue" placeholder="请选择">
+    <t-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+  </t-select>
+
+  <t-select v-model="multiValue" multiple placeholder="多选" :options="options" />
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const selectedValue = ref('')
+const multiValue = ref([])
+const options = ref([
+  { label: '选项一', value: '1' },
+  { label: '选项二', value: '2' },
+  { label: '选项三', value: '3' },
+])
+</script>
+```
+
+**弹窗组件**
+
+```vue
+<template>
+  <t-button @click="visible = true">打开弹窗</t-button>
+
+  <t-dialog v-model:visible="visible" header="弹窗标题" :on-confirm="handleConfirm">
+    <p>弹窗内容区域</p>
+  </t-dialog>
+</template>
+
+<script setup lang="ts">
+import { ref, h } from 'vue'
+
+const visible = ref(false)
+
+function handleConfirm() {
+  visible.value = false
+  console.log('确认操作')
+}
+</script>
+```
+
+**表格组件**
+
+```vue
+<template>
+  <t-table :data="tableData" :columns="columns" row-key="id" bordered stripe>
+    <template #status="{ row }">
+      <t-tag :theme="row.status === 1 ? 'success' : 'default'">
+        {{ row.status === 1 ? '启用' : '禁用' }}
+      </t-tag>
+    </template>
+
+    <template #operation="{ row }">
+      <t-button size="small" variant="text" @click="handleEdit(row)"> 编辑 </t-button>
+    </template>
+  </t-table>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const tableData = ref([
+  { id: 1, name: '张三', status: 1 },
+  { id: 2, name: '李四', status: 0 },
+])
+
+const columns = [
+  { colKey: 'id', title: 'ID', width: 80 },
+  { colKey: 'name', title: '姓名' },
+  { colKey: 'status', title: '状态', slot: 'status' },
+  { colKey: 'operation', title: '操作', slot: 'operation' },
+]
+
+function handleEdit(row: any) {
+  console.log('编辑行:', row)
+}
+</script>
+```
+
+**消息提示**
+
+```vue
+<template>
+  <t-button @click="showSuccess">成功提示</t-button>
+  <t-button @click="showError">错误提示</t-button>
+  <t-button @click="showWarning">警告提示</t-button>
+  <t-button @click="showInfo">普通提示</t-button>
+</template>
+
+<script setup lang="ts">
+import { Message } from 'tdesign-vue-next'
+
+function showSuccess() {
+  Message.success('操作成功')
+}
+
+function showError() {
+  Message.error('操作失败')
+}
+
+function showWarning() {
+  Message.warning('警告信息')
+}
+
+function showInfo() {
+  Message.info('普通信息')
+}
+</script>
+```
+
+**加载状态**
+
+```vue
+<template>
+  <t-button @click="loading = true" :loading="loading"> 点击加载 </t-button>
+
+  <t-loading :loading="isLoading">
+    <div class="content">加载完成后的内容</div>
+  </t-loading>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const loading = ref(false)
+const isLoading = ref(true)
+
+setTimeout(() => {
+  isLoading.value = false
+}, 2000)
+</script>
+```
+
+#### 4.6.5 完整组件列表
+
+TDesign 提供了丰富的组件，涵盖企业级应用的各个方面：
+
+| 分类     | 组件                                                         |
+| -------- | ------------------------------------------------------------ |
+| 基础     | Button、Icon、Typography、Divider、Space                     |
+| 布局     | Grid、Layout、Stack                                          |
+| 导航     | Menu、Tabs、Breadcrumb、Anchor、Pagination、BackTop          |
+| 输入     | Input、Textarea、Select、Cascader、TreeSelect、Transfer、Tree、DatePicker、TimePicker、ColorPicker、Upload |
+| 数据展示 | Table、Tag、Progress、Avatar、Badge、Collapse、Card、List、Comment |
+| 反馈     | Message、Notification、Dialog、Drawer、Popconfirm、Tooltip、Loading |
+| 其他     | ConfigProvider、Form、Validation                             |
+
+详细文档请参考 [TDesign Vue Next 组件库文档](https://tdesign.tencent.com/vue-next/components)
+
+#### 4.6.6 全局配置
+
+如果需要全局配置 TDesign 组件，可以在 `src/main.ts` 中添加：
+
+```typescript
+import { createApp } from 'vue'
+import { ConfigProvider } from 'tdesign-vue-next'
+import App from './App.vue'
+
+const app = createApp(App)
+
+app.use(ConfigProvider, {
+  globalConfig: {
+    theme: 'light', // 或 'dark'
+  },
+})
+
+app.mount('#app')
+```
+
+---
+
 ## 5. 配置说明
 
 ### 5.1 环境变量
@@ -1504,4 +1771,3 @@ server {
 | `.prettierrc.json`     | Prettier配置   |
 | `vitest.config.ts`     | Vitest配置     |
 | `playwright.config.ts` | Playwright配置 |
-
