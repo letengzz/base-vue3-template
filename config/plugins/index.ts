@@ -4,6 +4,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import useDevTools from './devTools'
 import useAutoImport from './autoImport'
 import useCompress from './compress'
+import useComponents from './component'
 /**
  * @description: vite插件列表
  */
@@ -13,6 +14,7 @@ const usePlugins = (mode: string, env: Record<string, string>) => {
     vue(),
     vueJsx(),
   ]
+  plugins.push(useComponents())
   plugins.push(useAutoImport())
   if (isDev) {
     plugins.push(useDevTools())
