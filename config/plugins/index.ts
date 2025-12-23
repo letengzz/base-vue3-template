@@ -3,10 +3,9 @@ import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import useDevTools from './devTools'
 import useAutoImport from './autoImport'
+import useComponents from './component'
 import useCompress from './compress'
-/**
- * @description: vite插件列表
- */
+
 const usePlugins = (mode: string, env: Record<string, string>) => {
   const isDev = mode === 'development'
   const plugins: PluginOption[] = [
@@ -14,6 +13,7 @@ const usePlugins = (mode: string, env: Record<string, string>) => {
     vueJsx(),
   ]
   plugins.push(useAutoImport())
+  plugins.push(useComponents())
   if (isDev) {
     plugins.push(useDevTools())
   } else {
@@ -23,4 +23,5 @@ const usePlugins = (mode: string, env: Record<string, string>) => {
   }
   return plugins
 }
+
 export default usePlugins

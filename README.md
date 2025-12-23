@@ -15,6 +15,7 @@
 - **Vue 3.5** - 渐进式JavaScript框架
 - **TypeScript 5.8** - 类型安全的JavaScript超集
 - **Vite 6** - 下一代前端构建工具
+- **NaiveUI 2.43** - Vue 3 UI组件库
 - **Pinia 3** - Vue状态管理库
 - **Vue Router 4** - 官方路由管理器
 - **Axios 1.12** - HTTP客户端库
@@ -27,7 +28,8 @@
 
 - **模块化架构** - 清晰的目录结构，便于代码组织和维护
 - **类型安全** - 全面的TypeScript支持，减少运行时错误
-- **自动化API** - 使用unplugin-auto-import自动导入Vue API
+- **自动化导入** - 使用unplugin-auto-import和unplugin-vue-components自动导入Vue API和组件
+- **NaiveUI集成** - 内置NaiveUI组件库，支持自动导入
 - **代码规范** - 集成ESLint和Prettier，保证代码质量
 - **高性能构建** - 优化的Vite配置，支持代码分割和压缩
 - **持久化存储** - Pinia状态持久化支持
@@ -44,6 +46,7 @@ base-vue3-template/
 │   ├── plugins/              # Vite插件配置
 │   │   ├── index.ts          # 插件入口
 │   │   ├── autoImport.ts     # 自动导入配置
+│   │   ├── component.ts      # 组件配置
 │   │   ├── compress.ts       # 压缩插件配置
 │   │   └── devTools.ts       # 开发工具配置
 │   ├── build.ts              # 构建配置
@@ -1068,6 +1071,656 @@ type ProductResponse = ApiResponse<ProductListResponse>
 
 ---
 
+### 4.6 NaiveUI组件库
+
+本项目集成了 NaiveUI 作为 UI 组件库，提供了丰富的 Vue 3 组件。组件支持自动导入，无需手动 import 即可在模板中使用。
+
+#### 4.6.1 自动导入配置
+
+项目使用 `unplugin-vue-components` 和 `NaiveUiResolver` 实现组件的自动导入。在 `config/plugins/` 目录下已配置好相关插件：
+
+**`config/plugins/autoImport.ts`** - 自动导入 API 和组件解析器
+
+```typescript
+import AutoImport from 'unplugin-auto-import/vite'
+import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
+
+const useAutoImport = () => {
+  return AutoImport({
+    resolvers: [NaiveUiResolver()],
+    imports: ['vue', 'vue-router', 'pinia'],
+    dts: './types/auto-imports.d.ts',
+    dirs: ['src/api/**/*.ts', 'src/utils/**/*.ts'],
+  })
+}
+
+export default useAutoImport
+```
+
+**`config/plugins/component.ts`** - 组件自动导入配置
+
+```typescript
+import Components from 'unplugin-vue-components/vite'
+import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
+
+const useComponents = () => {
+  return Components({
+    resolvers: [NaiveUiResolver()],
+    dts: './types/components.d.ts',
+  })
+}
+
+export default useComponents
+```
+
+自动导入会在 `types/` 目录下生成类型声明文件，确保 TypeScript 能够正确识别组件类型。
+
+#### 4.6.2 基础使用示例
+
+在 `src/main.ts` 中注册 NaiveUI：
+
+```typescript
+import { createApp } from 'vue'
+import naive from 'naive-ui'
+import { useRouter } from './router'
+import { usePinia } from './stores'
+import App from './App.vue'
+
+const app = createApp(App)
+
+app.use(naive)
+useRouter(app)
+usePinia(app)
+
+app.mount('#app')
+```
+
+在组件模板中直接使用 NaiveUI 组件（无需手动 import）：
+
+```vue
+<template>
+  <n-button type="primary" @click="handleClick">主要按钮</n-button>
+  <n-button type="success">成功按钮</n-button>
+  <n-input v-model:value="inputValue" placeholder="请输入内容" />
+  <n-card title="卡片标题">
+    <p>卡片内容</p>
+  </n-card>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const inputValue = ref('')
+
+function handleClick() {
+  console.log('按钮被点击')
+}
+</script>
+```
+
+#### 4.6.3 全局配置Provider
+
+NaiveUI 提供了多个 Provider 组件用于全局配置和功能注入，建议在根组件中使用：
+
+```vue
+<template>
+  <n-config-provider :theme-overrides="themeOverrides">
+    <n-message-provider>
+      <n-notification-provider>
+        <n-dialog-provider>
+          <n-loading-bar-provider>
+            <div class="app-container">
+              <router-view />
+            </div>
+          </n-loading-bar-provider>
+        </n-dialog-provider>
+      </n-notification-provider>
+    </n-message-provider>
+  </n-config-provider>
+</template>
+
+<script setup lang="ts">
+import type { GlobalThemeOverrides } from 'naive-ui'
+
+const themeOverrides: GlobalThemeOverrides = {
+  common: {
+    primaryColor: '#18a058',
+    primaryColorHover: '#36ad6a',
+    primaryColorPressed: '#0c7a43',
+  },
+  Button: {
+    textColorPrimary: '#ffffff',
+  },
+}
+</script>
+```
+
+**Provider 说明：**
+
+| Provider                  | 作用               |
+| ------------------------- | ------------------ |
+| `n-config-provider`       | 全局主题和配置注入 |
+| `n-message-provider`      | 消息提示功能       |
+| `n-notification-provider` | 通知提醒功能       |
+| `n-dialog-provider`       | 对话框功能         |
+| `n-loading-bar-provider`  | 加载进度条功能     |
+
+#### 4.6.4 常用组件示例
+
+**按钮组件**
+
+```vue
+<template>
+  <n-space>
+    <n-button type="primary">主要</n-button>
+    <n-button type="info">信息</n-button>
+    <n-button type="success">成功</n-button>
+    <n-button type="warning">警告</n-button>
+    <n-button type="error">错误</n-button>
+  </n-space>
+
+  <n-space>
+    <n-button dashed>虚线按钮</n-button>
+    <n-button text>文字按钮</n-button>
+  </n-space>
+
+  <n-space>
+    <n-button size="small">小</n-button>
+    <n-button size="medium">中</n-button>
+    <n-button size="large">大</n-button>
+  </n-space>
+
+  <n-space>
+    <n-button circle>圆</n-button>
+    <n-button round>圆角</n-button>
+  </n-space>
+</template>
+```
+
+**表单组件**
+
+```vue
+<template>
+  <n-form ref="formRef" :model="formData" :rules="rules">
+    <n-form-item label="用户名" path="username">
+      <n-input v-model:value="formData.username" placeholder="请输入用户名" />
+    </n-form-item>
+
+    <n-form-item label="密码" path="password">
+      <n-input
+        v-model:value="formData.password"
+        type="password"
+        show-password-on="click"
+        placeholder="请输入密码"
+      />
+    </n-form-item>
+
+    <n-form-item label="邮箱" path="email">
+      <n-input v-model:value="formData.email" placeholder="请输入邮箱" />
+    </n-form-item>
+
+    <n-form-item label="选择器" path="select">
+      <n-select v-model:value="formData.select" :options="selectOptions" placeholder="请选择" />
+    </n-form-item>
+
+    <n-form-item>
+      <n-button type="primary" @click="handleSubmit">提交</n-button>
+      <n-button @click="handleReset">重置</n-button>
+    </n-form-item>
+  </n-form>
+</template>
+
+<script setup lang="ts">
+import { ref, reactive } from 'vue'
+import type { FormRules, SelectOption } from 'vue'
+
+const formRef = ref()
+
+const formData = reactive({
+  username: '',
+  password: '',
+  email: '',
+  select: null as string | null,
+})
+
+const rules: FormRules = {
+  username: {
+    required: true,
+    message: '请输入用户名',
+    trigger: 'blur',
+  },
+  password: {
+    required: true,
+    message: '请输入密码',
+    trigger: 'blur',
+  },
+  email: [
+    { required: true, message: '请输入邮箱', trigger: 'blur' },
+    { type: 'email', message: '邮箱格式不正确', trigger: 'blur' },
+  ],
+}
+
+const selectOptions: SelectOption[] = [
+  { label: '选项一', value: 'option1' },
+  { label: '选项二', value: 'option2' },
+  { label: '选项三', value: 'option3' },
+]
+
+function handleSubmit() {
+  formRef.value?.validate((errors) => {
+    if (!errors) {
+      console.log('表单数据:', formData)
+    }
+  })
+}
+
+function handleReset() {
+  formRef.value?.restoreValidation()
+}
+</script>
+```
+
+**表格组件**
+
+```vue
+<template>
+  <n-data-table :columns="columns" :data="tableData" :pagination="pagination" :bordered="false" />
+</template>
+
+<script setup lang="ts">
+import { ref, h } from 'vue'
+import type { DataTableColumns } from 'naive-ui'
+
+interface TableItem {
+  id: number
+  name: string
+  age: number
+  address: string
+  status: 'active' | 'inactive'
+}
+
+const tableData = ref<TableItem[]>([
+  { id: 1, name: '张三', age: 28, address: '北京市', status: 'active' },
+  { id: 2, name: '李四', age: 32, address: '上海市', status: 'inactive' },
+  { id: 3, name: '王五', age: 25, address: '广州市', status: 'active' },
+])
+
+const pagination = ref({
+  pageSize: 10,
+})
+
+const columns: DataTableColumns<TableItem> = [
+  { title: 'ID', key: 'id', width: 80 },
+  { title: '姓名', key: 'name' },
+  { title: '年龄', key: 'age', width: 80 },
+  { title: '地址', key: 'address' },
+  {
+    title: '状态',
+    key: 'status',
+    width: 100,
+    render(row) {
+      return h(
+        'n-tag',
+        { type: row.status === 'active' ? 'success' : 'error' },
+        {
+          default: () => (row.status === 'active' ? '活跃' : '非活跃'),
+        },
+      )
+    },
+  },
+  {
+    title: '操作',
+    key: 'actions',
+    width: 120,
+    render(row) {
+      return h(
+        'n-space',
+        {},
+        {
+          default: () => [
+            h(
+              'n-button',
+              { size: 'small', onClick: () => handleEdit(row) },
+              { default: () => '编辑' },
+            ),
+            h(
+              'n-button',
+              { size: 'small', type: 'error', onClick: () => handleDelete(row) },
+              { default: () => '删除' },
+            ),
+          ],
+        },
+      )
+    },
+  },
+]
+
+function handleEdit(row: TableItem) {
+  console.log('编辑:', row)
+}
+
+function handleDelete(row: TableItem) {
+  console.log('删除:', row)
+}
+</script>
+```
+
+**对话框和消息**
+
+```vue
+<template>
+  <n-space>
+    <n-button @click="showModal = true">打开弹窗</n-button>
+    <n-button @click="showDrawer = true">打开抽屉</n-button>
+  </n-space>
+
+  <n-modal v-model:show="showModal" preset="dialog" title="确认删除">
+    <template #default>
+      <p>确定要删除这条记录吗？此操作不可恢复。</p>
+    </template>
+    <template #action>
+      <n-button @click="showModal = false">取消</n-button>
+      <n-button type="error" @click="confirmDelete">删除</n-button>
+    </template>
+  </n-modal>
+
+  <n-drawer v-model:show="showDrawer" :width="500">
+    <n-drawer-content title="抽屉标题" closable>
+      <p>抽屉内容区域</p>
+    </n-drawer-content>
+  </n-drawer>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useMessage, useDialog } from 'naive-ui'
+
+const message = useMessage()
+const dialog = useDialog()
+const showModal = ref(false)
+const showDrawer = ref(false)
+
+function confirmDelete() {
+  showModal.value = false
+  message.success('删除成功')
+}
+
+function showSuccess() {
+  message.success('操作成功')
+}
+
+function showWarning() {
+  message.warning('请注意')
+}
+
+function showError() {
+  message.error('操作失败')
+}
+
+function showInfo() {
+  message.info('这是一条信息')
+}
+
+function showConfirm() {
+  dialog.warning({
+    title: '确认操作',
+    content: '确定要执行此操作吗？',
+    positiveText: '确定',
+    negativeText: '取消',
+    onPositiveClick: () => {
+      message.success('已确认')
+    },
+  })
+}
+</script>
+```
+
+**通知和加载**
+
+```vue
+<template>
+  <n-space>
+    <n-button @click="showNotification">显示通知</n-button>
+    <n-button @click="startLoading">开始加载</n-button>
+  </n-space>
+</template>
+
+<script setup lang="ts">
+import { useNotification, useLoadingBar } from 'naive-ui'
+
+const notification = useLoadingBar()
+
+function showNotification() {
+  notification.create({
+    title: '通知标题',
+    description: '这是一条通知消息，内容可以很长',
+    duration: 5000,
+  })
+}
+
+const loadingBar = useLoadingBar()
+
+function startLoading() {
+  loadingBar.start()
+  setTimeout(() => {
+    loadingBar.finish()
+  }, 2000)
+}
+</script>
+```
+
+#### 4.6.5 主题定制
+
+通过 `n-config-provider` 可以全局定制主题：
+
+```vue
+<template>
+  <n-config-provider :theme-overrides="themeOverrides">
+    <App />
+  </n-config-provider>
+</template>
+
+<script setup lang="ts">
+import type { GlobalThemeOverrides } from 'naive-ui'
+
+const themeOverrides: GlobalThemeOverrides = {
+  common: {
+    primaryColor: '#18a058',
+    primaryColorHover: '#36ad6a',
+    primaryColorPressed: '#0c7a43',
+    primaryColorSuppl: '#36ad6a',
+    infoColor: '#2080f0',
+    successColor: '#18a058',
+    warningColor: '#f0a020',
+    errorColor: '#d03050',
+    textColorBase: '#333639',
+    textColor1: '#333639',
+    textColor2: '#666',
+    textColor3: '#999',
+    borderColor: '#e0e0e6',
+  },
+  Button: {
+    fontWeight: '500',
+    borderRadiusMedium: '6px',
+  },
+  Input: {
+    borderRadius: '6px',
+  },
+  Card: {
+    borderRadius: '8px',
+  },
+}
+</script>
+```
+
+#### 4.6.6 完整页面示例
+
+```vue
+<template>
+  <n-config-provider :theme-overrides="themeOverrides">
+    <n-message-provider>
+      <n-notification-provider>
+        <n-dialog-provider>
+          <n-loading-bar-provider>
+            <div class="page-container">
+              <n-layout has-sider>
+                <n-layout-sider bordered collapse-mode="width" :collapsed-width="64" :width="240">
+                  <div class="logo">管理系统</div>
+                  <n-menu
+                    v-model:value="activeKey"
+                    :options="menuOptions"
+                    @update:value="handleMenuClick"
+                  />
+                </n-layout-sider>
+
+                <n-layout>
+                  <n-layout-header bordered style="height: 64px; padding: 0 24px;">
+                    <div class="header-content">
+                      <span class="page-title">{{ currentRouteTitle }}</span>
+                      <n-space>
+                        <n-badge :value="3" :max="9">
+                          <n-button quaternary circle>
+                            <template #icon>
+                              <n-icon><notifications /></n-icon>
+                            </template>
+                          </n-button>
+                        </n-badge>
+                        <n-avatar
+                          round
+                          size="small"
+                          src="https://avatars.githubusercontent.com/u/123456"
+                        />
+                      </n-space>
+                    </div>
+                  </n-layout-header>
+
+                  <n-layout-content content-style="padding: 24px;">
+                    <router-view />
+                  </n-layout-content>
+                </n-layout>
+              </n-layout>
+            </div>
+          </n-loading-bar-provider>
+        </n-dialog-provider>
+      </n-notification-provider>
+    </n-message-provider>
+  </n-config-provider>
+</template>
+
+<script setup lang="ts">
+import { ref, computed, h } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { NIcon } from 'naive-ui'
+import type { MenuOption } from 'naive-ui'
+
+function renderIcon(icon: any) {
+  return () => h(NIcon, null, { default: () => h(icon) })
+}
+
+const router = useRouter()
+const route = useRoute()
+const activeKey = ref<string | null>(null)
+
+const menuOptions: MenuOption[] = [
+  {
+    label: '首页',
+    key: 'home',
+    icon: renderIcon(homeIcon),
+  },
+  {
+    label: '用户管理',
+    key: 'users',
+    icon: renderIcon(userIcon),
+  },
+  {
+    label: '系统设置',
+    key: 'settings',
+    icon: renderIcon(settingsIcon),
+  },
+]
+
+const currentRouteTitle = computed(() => {
+  return route.meta.title || '首页'
+})
+
+function handleMenuClick(key: string) {
+  activeKey.value = key
+  router.push({ name: key })
+}
+
+// 图标组件定义
+const homeIcon = {
+  render: () =>
+    h('svg', { xmlns: 'http://www.w3.org/2000/svg', viewBox: '0 0 24 24' }, [
+      h('path', { fill: 'currentColor', d: 'M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z' }),
+    ]),
+}
+
+const userIcon = {
+  render: () =>
+    h('svg', { xmlns: 'http://www.w3.org/2000/svg', viewBox: '0 0 24 24' }, [
+      h('path', {
+        fill: 'currentColor',
+        d: 'M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z',
+      }),
+    ]),
+}
+
+const settingsIcon = {
+  render: () =>
+    h('svg', { xmlns: 'http://www.w3.org/2000/svg', viewBox: '0 0 24 24' }, [
+      h('path', {
+        fill: 'currentColor',
+        d: 'M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z',
+      }),
+    ]),
+}
+
+const themeOverrides: GlobalThemeOverrides = {
+  common: {
+    primaryColor: '#18a058',
+  },
+}
+</script>
+
+<style scoped>
+.page-container {
+  min-height: 100vh;
+}
+
+.logo {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.header-content {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.page-title {
+  font-size: 18px;
+  font-weight: 500;
+}
+</style>
+```
+
+#### 4.6.7 注意事项
+
+1. **Provider 嵌套**：Message、Notification、Dialog、LoadingBar 等功能需要对应的 Provider 包裹才能正常工作
+2. **自动导入**：组件已配置自动导入，但 Nuxt 风格的组合式函数（如 `useMessage`）需要手动导入
+3. **图标使用**：图标组件需要手动导入或使用全局注册的方式
+4. **TSX 支持**：如果在 `.tsx` 文件中使用，需要在 `types/components.d.ts` 中声明全局组件类型
+
+---
+
 ## 5. 配置说明
 
 ### 5.1 环境变量
@@ -1504,4 +2157,3 @@ server {
 | `.prettierrc.json`     | Prettier配置   |
 | `vitest.config.ts`     | Vitest配置     |
 | `playwright.config.ts` | Playwright配置 |
-
