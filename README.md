@@ -56,8 +56,6 @@
 
 ```
 base-vue3-template/
-├── .trae/                    # Trae IDE配置
-│   └── documents/            # 项目文档
 ├── config/                   # Vite配置文件
 │   ├── plugins/              # Vite插件配置
 │   │   ├── index.ts          # 插件入口
@@ -1523,7 +1521,3 @@ server {
 | `vitest.config.ts`     | Vitest配置     |
 | `playwright.config.ts` | Playwright配置 |
 
----
-
-_文档生成时间: 2025-01-21_
-_项目版本: 0.0.0_
