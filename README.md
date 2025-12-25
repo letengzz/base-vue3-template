@@ -13,16 +13,17 @@
 ### 技术栈
 
 - **Vue 3.5** - 渐进式JavaScript框架
-- **TypeScript 5.8** - 类型安全的JavaScript超集
-- **Vite 6** - 下一代前端构建工具
+- **TypeScript 5.9** - 类型安全的JavaScript超集
+- **Vite 7** - 下一代前端构建工具
 - **NaiveUI 2.43** - Vue 3 UI组件库
 - **Pinia 3** - Vue状态管理库
 - **Vue Router 4** - 官方路由管理器
-- **Axios 1.12** - HTTP客户端库
-- **Vitest** - 单元测试框架
-- **Playwright** - E2E测试框架
+- **Axios 1.13** - HTTP客户端库
+- **Vitest 4** - 单元测试框架
+- **Playwright 1.57** - E2E测试框架
 - **ESLint 9** - 代码质量检查工具
-- **Prettier** - 代码格式化工具
+- **Oxlint 1.35** - 高性能JavaScript/TypeScript检查工具
+- **Prettier 3** - 代码格式化工具
 
 ### 核心特性
 
@@ -86,6 +87,7 @@ base-vue3-template/
 ├── .gitignore
 ├── .npmrc
 ├── .prettierrc.json          # Prettier配置
+├── .oxlintrc.json            # Oxlint配置
 ├── eslint.config.ts          # ESLint配置
 ├── index.html                # HTML入口
 ├── package.json              # 项目依赖
@@ -158,6 +160,11 @@ pnpm preview
 
 ### 代码检查
 
+本项目集成了 **ESLint** 和 **Oxlint** 两套代码检查工具：
+
+- **ESLint** - 成熟的代码质量检查工具，支持Vue、TypeScript
+- **Oxlint** - 基于Rust的高性能检查工具，速度比ESLint快10-100倍
+
 ```bash
 # 运行所有lint检查
 pnpm lint
@@ -170,6 +177,245 @@ pnpm lint:oxlint
 
 # 代码格式化
 pnpm format
+```
+
+#### Oxlint
+
+Oxlint 是基于 Rust 的高性能 JavaScript/TypeScript 检查工具，使用 `.oxlintrc.json` 配置文件。其 API 基本与 ESLint v8 兼容，支持 rules、env 等配置。
+
+##### 配置说明
+
+Oxlint 使用 `.oxlintrc.json` 配置文件，支持以下规则类别：
+
+| 类别            | 说明                                 |
+| --------------- | ------------------------------------ |
+| **correctness** | 正确性规则（未使用变量、常量条件等） |
+| **style**       | 代码风格（使用const、块语句等）      |
+| **complexity**  | 复杂度规则（可选链等）               |
+| **suspicious**  | 可疑代码（双等号、重复case等）       |
+
+##### 规则示例
+
+```json
+{
+  "rules": {
+    "no-unused-vars": "error",
+    "no-unused-imports": "error",
+    "no-console": "warn",
+    "no-debugger": "warn",
+    "no-eval": "error",
+    "no-implicit-globals": "error",
+    "prefer-const": "error",
+    "no-var": "error",
+    "object-shorthand": "warn",
+    "quote-props": ["warn", "consistent-as-needed"],
+    "no-duplicate-imports": "error",
+    "no-useless-escape": "warn",
+    "array-callback-return": "error",
+    "no-empty": ["warn", { "allowEmptyCatch": true }],
+    "no-new-wrappers": "error",
+    "no-throw-literal": "error",
+    "prefer-spread": "warn",
+    "prefer-arrow-callback": "warn"
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2022": true
+  }
+}
+```
+
+##### 规则说明
+
+| 规则                    | 级别  | 说明                                 |
+| ----------------------- | ----- | ------------------------------------ |
+| `no-unused-vars`        | error | 禁止未使用的变量                     |
+| `no-unused-imports`     | error | 禁止未使用的导入                     |
+| `no-console`            | warn  | 禁止使用 console（生产环境建议开启） |
+| `no-debugger`           | warn  | 禁止使用 debugger                    |
+| `no-eval`               | error | 禁止使用 eval()，存在安全风险        |
+| `no-implicit-globals`   | error | 禁止隐式全局变量                     |
+| `prefer-const`          | error | 优先使用 const                       |
+| `no-var`                | error | 禁止使用 var                         |
+| `object-shorthand`      | warn  | 优先使用对象属性简写语法             |
+| `quote-props`           | warn  | 属性引号一致性配置                   |
+| `no-duplicate-imports`  | error | 禁止重复导入同一模块                 |
+| `no-useless-escape`     | warn  | 禁止无用的转义字符                   |
+| `array-callback-return` | error | 数组方法回调必须返回值               |
+| `no-empty`              | warn  | 禁止空代码块（允许空 catch）         |
+| `no-new-wrappers`       | error | 禁止 new String/Number/Boolean       |
+| `no-throw-literal`      | error | throw 只能抛出 Error 对象            |
+| `prefer-spread`         | warn  | 优先使用展开运算符                   |
+| `prefer-arrow-callback` | warn  | 优先使用箭头函数作为回调             |
+
+##### 环境配置
+
+| 环境      | 说明                                           |
+| --------- | ---------------------------------------------- |
+| `browser` | 浏览器环境，提供 window、document 等全局变量   |
+| `node`    | Node.js 环境，提供 require、process 等全局变量 |
+| `es2022`  | ES2022 语法支持                                |
+
+##### VSCode 集成
+
+安装 **oxc** 扩展后，Oxlint 会自动在编辑器中显示实时错误提示（需要oxlint 1.35.0+版本）。
+
+如遇到 LSP 启动问题，可在 VSCode 设置中禁用：
+
+```json
+{
+  "oxc.enableLsp": false,
+  "oxc.analysis.enable": false
+}
+```
+
+#### ESLint
+
+##### 配置说明
+
+ESLint 使用 `eslint.config.ts` 配置文件，支持以下功能：
+
+- **Vue 文件检查**: 使用 `eslint-plugin-vue`
+- **TypeScript 检查**: 使用 TypeScript ESLint
+- **Oxlint 集成**: 使用 `eslint-plugin-oxlint` 在 ESLint 中运行 Oxlint
+- **Vitest 检查**: 使用 `@vitest/eslint-plugin`
+- **Prettier 集成**: 使用 `eslint-config-prettier` 禁用冲突规则
+
+##### 配置文件示例
+
+```typescript
+// eslint.config.ts
+import pluginVue from 'eslint-plugin-vue'
+import parserTypeScript from '@typescript-eslint/parser'
+import pluginTypeScript from '@typescript-eslint/eslint-plugin'
+import pluginOxlint from 'eslint-plugin-oxlint'
+import pluginPrettier from 'eslint-config-prettier'
+import pluginVitest from '@vitest/eslint-plugin'
+
+export default [
+  {
+    files: ['**/*.vue'],
+    plugins: {
+      vue: pluginVue,
+    },
+    parser: 'vue-eslint-parser',
+    rules: {
+      ...pluginVue.configs['vue3-essential'].rules,
+    },
+  },
+  {
+    files: ['**/*.ts'],
+    plugins: {
+      '@typescript-eslint': pluginTypeScript,
+      oxlint: pluginOxlint,
+      vitest: pluginVitest,
+    },
+    parser: parserTypeScript,
+    parserOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+    },
+    rules: {
+      ...pluginTypeScript.configs.recommended.rules,
+      ...pluginVitest.configs.recommended.rules,
+    },
+  },
+  pluginPrettier,
+]
+```
+
+##### 常用规则
+
+```typescript
+// 在 rules 中添加自定义规则
+rules: {
+  '@typescript-eslint/no-unused-vars': 'error',
+  '@typescript-eslint/no-explicit-any': 'warn',
+  'vue/multi-word-component-names': 'off',
+  'vitest/valid-describe': 'error',
+}
+```
+
+##### VSCode 集成
+
+安装 **ESLint** 扩展后，ESLint 会自动在编辑器中显示错误提示。
+
+VSCode 设置示例（`.vscode/settings.json`）：
+
+```json
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.validate": ["javascript", "typescript", "vue"]
+}
+```
+
+#### Prettier
+
+##### 配置说明
+
+Prettier 使用 `.prettierrc.json` 配置文件，支持以下功能：
+
+- **代码格式化**: 自动格式化 JavaScript、TypeScript、Vue、CSS 等
+- **Oxlint 集成**: 使用 `@prettier/plugin-oxc` 格式化 oxlint 规则文件
+- **ESLint 集成**: 使用 `eslint-config-prettier` 禁用 ESLint 与 Prettier 冲突的规则
+
+##### 配置文件示例
+
+```json
+{
+  "$schema": "https://json.schemastore.org/prettierrc",
+  "semi": true,
+  "tabWidth": 2,
+  "singleQuote": true,
+  "printWidth": 100,
+  "trailingComma": "es5",
+  "bracketSpacing": true,
+  "arrowParens": "avoid",
+  "endOfLine": "lf",
+  "htmlWhitespaceSensitivity": "ignore",
+  "vueIndentScriptAndStyle": false
+}
+```
+
+##### 忽略文件
+
+在 `.prettierignore` 文件中配置不格式化的文件：
+
+```
+dist/
+node_modules/
+pnpm-lock.yaml
+.env
+.env.*
+*.local
+```
+
+##### VSCode 集成
+
+安装 **Prettier** 扩展后，Prettier 会自动格式化代码。
+
+VSCode 设置示例（`.vscode/settings.json`）：
+
+```json
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.configPath": ".prettierrc.json"
+}
+```
+
+##### 格式化命令
+
+```bash
+# 格式化所有文件
+pnpm format
+
+# 格式化指定文件
+pnpm prettier --write src/App.vue
 ```
 
 ### 类型检查
@@ -2117,6 +2363,84 @@ server {
 
 修改 `config/plugins/autoImport.ts` 中的配置。
 
+### Q6: 如何升级依赖？
+
+```bash
+# 升级所有依赖到最新版本
+pnpm update --latest
+
+# 升级单个依赖
+pnpm add -D <package-name>@latest
+```
+
+---
+
+## 10. 版本更新记录
+
+### 2025-12-24 依赖升级
+
+| 依赖                        | 升级前              | 升级后 | 变更说明       |
+| --------------------------- | ------------------- | ------ | -------------- |
+| **dependencies**            |                     |        |                |
+| axios                       | 1.12.2              | 1.13.2 | HTTP客户端     |
+| pinia                       | 3.0.3               | 3.0.4  | 状态管理       |
+| pinia-plugin-persistedstate | 4.5.0               | 4.7.1  | 持久化插件     |
+| vite                        | rolldown-vite 7.3.0 | 7.1.13 | 构建工具       |
+| vue                         | 3.5.22              | 3.5.26 | 框架核心       |
+| vue-router                  | 4.5.1               | 4.6.4  | 路由管理       |
+| **devDependencies**         |                     |        |                |
+| @playwright/test            | 1.55.1              | 1.57.0 | E2E测试        |
+| @prettier/plugin-oxc        | 0.0.4               | 0.1.3  | Prettier插件   |
+| @types/jsdom                | 21.1.7              | 27.0.0 | DOM类型        |
+| @types/node                 | 22.18.6             | 25.0.3 | Node类型       |
+| @vitejs/plugin-vue          | 6.0.1               | 6.0.3  | Vue插件        |
+| @vitejs/plugin-vue-jsx      | 5.1.1               | 5.1.2  | JSX插件        |
+| @vitest/eslint-plugin       | 1.3.12              | 1.6.3  | Vitest ESLint  |
+| @vue/tsconfig               | 0.7.0               | 0.8.1  | Vue TS配置     |
+| eslint                      | 9.36.0              | 9.39.2 | 代码检查       |
+| eslint-plugin-oxlint        | 1.8.0               | 1.35.0 | Oxlint插件     |
+| eslint-plugin-playwright    | 2.2.2               | 2.4.0  | Playwright插件 |
+| eslint-plugin-vue           | 10.3.0              | 10.6.2 | Vue插件        |
+| jiti                        | 2.6.0               | 2.6.1  | 运行时         |
+| jsdom                       | 26.1.0              | 27.3.0 | DOM模拟        |
+| oxlint                      | 1.8.0               | 1.35.0 | 高性能检查     |
+| prettier                    | 3.6.2               | 3.7.4  | 代码格式化     |
+| typescript                  | 5.8.3               | 5.9.3  | 类型检查       |
+| unplugin-auto-import        | 20.2.0              | 20.3.0 | 自动导入       |
+| vite-plugin-vue-devtools    | 8.0.2               | 8.0.5  | 开发工具       |
+| vitest                      | 3.2.4               | 4.0.16 | 单元测试       |
+| vue-tsc                     | 3.0.8               | 3.2.1  | Vue类型检查    |
+
+### 重要变更
+
+- **oxlint 1.35.0**: 修复了LSP启动问题，支持`--lsp`标志
+- **@prettier/plugin-oxc 0.1.3**: 同步升级支持新版oxlint
+- **eslint-plugin-oxlint 1.35.0**: ESLint集成插件同步升级
+
+### 升级命令
+
+```bash
+# 升级所有依赖到最新版本
+pnpm update --latest
+
+# 查看可用的更新
+pnpm outdated
+```
+
+### Oxlint LSP 故障排除
+
+如遇到 oxc 扩展 LSP 启动失败（`Error: no such flag: '--lsp'`），请确保：
+
+1. oxlint 版本 >= 1.35.0
+2. VSCode oxc 扩展为最新版本
+3. 如仍有问题，可在 VSCode 设置中禁用 LSP：
+   ```json
+   {
+     "oxc.enableLsp": false,
+     "oxc.analysis.enable": false
+   }
+   ```
+
 ---
 
 ## 附录
@@ -2151,6 +2475,7 @@ server {
 
 | 文件                   | 说明           |
 | ---------------------- | -------------- |
+| `.oxlintrc.json`       | Oxlint配置     |
 | `vite.config.ts`       | Vite主配置     |
 | `tsconfig.json`        | TypeScript配置 |
 | `eslint.config.ts`     | ESLint配置     |
