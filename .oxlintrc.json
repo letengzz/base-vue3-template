@@ -1,0 +1,27 @@
+{
+  "rules": {
+    "no-unused-vars": "error",
+    "no-unused-imports": "error",
+    "no-console": "warn",
+    "no-debugger": "warn",
+    "no-eval": "error",
+    "no-implicit-globals": "error",
+    "prefer-const": "error",
+    "no-var": "error",
+    "object-shorthand": "warn",
+    "quote-props": ["warn", "consistent-as-needed"],
+    "no-duplicate-imports": "error",
+    "no-useless-escape": "warn",
+    "array-callback-return": "error",
+    "no-empty": ["warn", { "allowEmptyCatch": true }],
+    "no-new-wrappers": "error",
+    "no-throw-literal": "error",
+    "prefer-spread": "warn",
+    "prefer-arrow-callback": "warn"
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2022": true
+  }
+}
