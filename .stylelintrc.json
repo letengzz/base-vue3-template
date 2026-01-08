@@ -1,0 +1,25 @@
+{
+  "extends": [
+    "stylelint-config-recommended-less",
+    "stylelint-config-recess-order"
+  ],
+  "rules": {
+    "selector-class-pattern": null,
+    "function-url-quotes": "always",
+    "color-hex-length": "short",
+    "length-zero-no-unit": true,
+    "shorthand-property-no-redundant-values": true,
+    "declaration-block-no-redundant-longhand-properties": true,
+    "block-no-empty": null,
+    "comment-empty-line-before": "always",
+    "comment-no-empty": true,
+    "alpha-value-notation": "number",
+    "hue-degree-notation": "degree",
+    "import-notation": "string",
+    "keyframes-name-pattern": null,
+    "selector-attribute-quotes": "always",
+    "selector-id-pattern": null,
+    "selector-nested-pattern": null,
+    "selector-type-case": "lower"
+  }
+}

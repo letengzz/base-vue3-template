@@ -23,6 +23,8 @@
 - **ESLint 9** - 代码质量检查工具
 - **Oxlint 1.35** - 高性能JavaScript/TypeScript检查工具
 - **Prettier 3** - 代码格式化工具
+- **Less 4.5** - CSS预处理器
+- **StyleLint 16** - CSS/Less代码检查工具
 
 ### 核心特性
 
@@ -415,6 +417,77 @@ pnpm format
 pnpm prettier --write src/App.vue
 ```
 
+#### StyleLint
+
+StyleLint 使用 `.stylelintrc.json` 配置文件，用于检查 CSS 和 Less 代码质量。
+
+##### 配置文件示例
+
+```json
+{
+  "extends": [
+    "stylelint-config-recommended-less",
+    "stylelint-config-recess-order"
+  ],
+  "rules": {
+    "selector-class-pattern": null,
+    "function-url-quotes": "always",
+    "color-hex-length": "short",
+    "color-hex-case": "lower",
+    "number-leading-zero": "never",
+    "number-no-trailing-zeros": true,
+    "length-zero-no-unit": true,
+    "unit-case": "lower",
+    "shorthand-property-no-redundant-values": true,
+    "value-list-max-empty-lines": 0,
+    "declaration-block-no-redundant-longhand-properties": true,
+    "block-no-empty": null,
+    "comment-empty-line-before": "always",
+    "comment-no-empty": true,
+    "string-quotes": "single",
+    "indentation": 2,
+    "max-empty-lines": 1
+  }
+}
+```
+
+##### 常用规则
+
+| 规则 | 说明 |
+| ---- | ---- |
+| `color-hex-length` | 短格式十六进制颜色 (#fff) |
+| `color-hex-case` | 小写十六进制颜色 |
+| `number-leading-zero` | 无前导零 (.5) |
+| `length-zero-no-unit` | 零值无单位 |
+| `unit-case` | 单位小写 |
+| `string-quotes` | 使用单引号 |
+| `indentation` | 2空格缩进 |
+| `selector-class-pattern` | 禁用类名模式检查 |
+| `block-no-empty` | 禁用空块检查 |
+
+##### 使用命令
+
+```bash
+# 检查样式文件
+pnpm lint:stylelint
+
+# 检查并自动修复
+pnpm lint:stylelint --fix
+```
+
+##### VSCode 集成
+
+安装 **StyleLint** 扩展后，会自动在编辑器中显示错误提示。
+
+```json
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.stylelint": "explicit"
+  },
+  "stylelint.validate": ["css", "less", "scss", "vue"]
+}
+```
+
 ### 类型检查
 
 ```bash
@@ -766,7 +839,137 @@ const routes: RouteRecordRaw[] = [
 
 ---
 
-### 4.3 HTTP请求封装
+### 4.3 Less 样式处理
+
+本项目集成了 Less 预处理器，可以直接在 Vue 组件中使用 `<style lang="less">`。
+
+#### 4.3.1 基本使用
+
+```vue
+<template>
+  <div class="container">
+    <h1>Less 示例</h1>
+    <p class="text">这是一段使用 Less 样式的文本</p>
+  </div>
+</template>
+
+<script setup lang="ts">
+</script>
+
+<style lang="less">
+@primary-color: #1890ff;
+@text-color: #333;
+@border-radius: 4px;
+
+.container {
+  padding: 20px;
+  background: #fff;
+  border-radius: @border-radius;
+
+  h1 {
+    color: @primary-color;
+    font-size: 24px;
+  }
+
+  .text {
+    color: @text-color;
+    font-size: 14px;
+
+    &:hover {
+      color: @primary-color;
+    }
+  }
+}
+</style>
+```
+
+#### 4.3.2 Less 特性
+
+**变量（Variables）**
+
+```less
+@color: #1890ff;
+@spacing: 16px;
+
+.button {
+  background: @color;
+  padding: @spacing;
+}
+```
+
+**混合（Mixins）**
+
+```less
+.border-radius {
+  border-radius: 4px;
+}
+
+.border-radius(@radius) {
+  border-radius: @radius;
+}
+
+.box {
+  .border-radius;
+  .border-radius(8px);
+}
+```
+
+**嵌套（Nesting）**
+
+```less
+.container {
+  .header {
+    display: flex;
+    .title {
+      font-size: 18px;
+    }
+  }
+}
+```
+
+**运算（Operations）**
+
+```less
+@base-size: 16px;
+@scale: 1.5;
+
+.text {
+  font-size: @base-size * @scale;
+}
+
+.space {
+  margin: 20px / 2;
+}
+```
+
+**导入（Import）**
+
+```less
+@import './variables.less';
+@import './mixins.less';
+```
+
+#### 4.3.3 全局 Less 文件
+
+在 `src/styles/` 目录下创建全局样式文件：
+
+```
+src/
+├── styles/
+│   ├── variables.less  # 全局变量
+│   ├── mixins.less     # 全局混合
+│   └── index.less      # 入口文件
+```
+
+在 `main.ts` 中导入：
+
+```typescript
+import './styles/index.less'
+```
+
+---
+
+### 4.4 HTTP请求封装
 
 本项目封装了 Axios 库，提供了统一的请求拦截器、响应拦截器和错误处理机制。
 
