@@ -30,6 +30,11 @@ export default defineConfigWithVueTs(
     ...pluginVitest.configs.recommended,
     files: ['src/**/__tests__/*'],
   },
-
+  {
+    rules: {
+      // 取消组件名必须是多单词的限制
+      'vue/multi-word-component-names': 'off',
+    },
+  },
   skipFormatting,
 )
