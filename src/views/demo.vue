@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import { useDemoStore } from '@/stores/modules/demo'
-import { storeToRefs } from 'pinia'
+// import { storeToRefs } from 'pinia'
 
 // 初始化 Store 实例
 const demoStore = useDemoStore()
