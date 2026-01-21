@@ -9,6 +9,7 @@ import Layouts from 'vite-plugin-vue-layouts'
 // 自动引入注册
 import AutoImport from 'unplugin-auto-import/vite'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
+import Components from 'unplugin-vue-components/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -49,6 +50,11 @@ export default defineConfig({
         // globalsPropValue: true // 默认 true
       },
     }),
+    Components({
+      deep: true,
+      directoryAsNamespace: false,
+      dts: './types/components.d.ts' // 生成组件类型声明文件的路径
+    })
   ],
   resolve: {
     alias: {
