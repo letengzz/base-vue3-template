@@ -38,7 +38,7 @@ export default defineConfig({
         /\.md$/, // .md
       ],
       resolvers: [],
-      imports: ['vue', 'pinia', VueRouterAutoImports],
+      imports: ['vue', 'pinia', VueRouterAutoImports, '@vueuse/core'],
       dts: './types/auto-imports.d.ts',
       dirs: ['src/api/backend/**/*.ts', 'src/utils/**/*.ts'], // 自动导入项目中自定义的API和工具函数
       // eslint 报错解决：'ref' is not defined
