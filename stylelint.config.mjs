@@ -92,5 +92,5 @@ export default {
       { severity: 'error' },
     ],
   },
-  ignoreFiles: ['**/*.js', '**/*.jsx', '**/*.tsx', '**/*.ts'],
+  ignoreFiles: ['**/*.js', '**/*.jsx', '**/*.tsx', '**/*.ts', '**/*.md'],
 }
