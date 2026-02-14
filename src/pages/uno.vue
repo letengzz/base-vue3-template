@@ -1,0 +1,31 @@
+<template>
+<div>
+   <div class="demo">Hello world</div>
+  <div class="text-xs text-primary">测试文字</div>
+  <div class="text-sm text-success">测试文字</div>
+  <div class="text-md text-info">测试文字</div>
+
+  <div class="text-base text-warning">测试文字</div>
+  <div class="text-lg text-danger">测试文字</div>
+  <div class="text-xl text-text-primary">测试文字</div>
+  <div class="text-2xl text-text-regular">测试文字</div>
+  <div class="text-3xl text-text-secondary">测试文字</div>
+
+  <button class="mt-xl px-md py-sm border rounded-base" @click="toggleTheme">
+      切换深色/浅色模式
+  </button>
+</div>
+</template>
+
+<script setup lang="ts">
+const toggleTheme= () => {
+const html = document.documentElement
+const currentTheme = html.getAttribute('data-theme')
+  html.setAttribute('data-theme', currentTheme ==='dark'?'light':'dark')
+}
+</script>
+<style scoped lang="scss">
+.demo{
+@apply text-xl text-primary bg-success-light-7;
+}
+</style>

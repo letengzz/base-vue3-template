@@ -10,6 +10,7 @@ import Layouts from 'vite-plugin-vue-layouts'
 import AutoImport from 'unplugin-auto-import/vite'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
 import Components from 'unplugin-vue-components/vite'
+import UnoCSS from 'unocss/vite'// 导入 UnoCSS 插件
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -57,7 +58,8 @@ export default defineConfig(({ mode }) => {
         deep: true,
         directoryAsNamespace: false,
         dts: './types/components.d.ts' // 生成组件类型声明文件的路径
-      })
+      }),
+      UnoCSS()
     ],
     resolve: {
       alias: {
