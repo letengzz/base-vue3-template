@@ -40,3 +40,5 @@ playwright-report/
 /types/typed-router.d.ts
 /types/components.d.ts
 /types/auto-imports.d.ts
+/pnpm-lock.yaml
+/.eslintrc-auto-import.json
