@@ -59,16 +59,18 @@ src/
 
 ## 命令速查表
 
-| 命令 | 描述 |
-|------|------|
-| `pnpm dev` | 启动开发服务器 |
-| `pnpm build` | 构建生产版本（包含类型检查） |
-| `pnpm preview` | 预览构建后的产物 |
-| `pnpm type-check` | 执行 TypeScript 类型检查 |
-| `pnpm test:unit` | 运行单元测试 |
-| `pnpm test:e2e` | 运行 E2E 测试 |
-| `pnpm lint` | 自动修复 ESLint 错误 |
-| `pnpm format` | 格式化 src 目录下的代码 |
+
+| 命令              | 描述                         |
+| ----------------- | ---------------------------- |
+| `pnpm dev`        | 启动开发服务器               |
+| `pnpm build`      | 构建生产版本（包含类型检查） |
+| `pnpm preview`    | 预览构建后的产物             |
+| `pnpm type-check` | 执行 TypeScript 类型检查     |
+| `pnpm test:unit`  | 运行单元测试                 |
+| `pnpm test:e2e`   | 运行 E2E 测试                |
+| `pnpm lint`       | 自动修复 ESLint 错误         |
+| `pnpm format`     | 格式化 src 目录下的代码      |
+
 
 ## 快速开始
 
@@ -140,3 +142,19 @@ pnpm format
 - [VS Code](https://code.visualstudio.com/)
 - [Vue - Official (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
 - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) (浏览器扩展)
+
+
+## 详细文档
+
+请查阅 [docs/README.md](docs/README.md) 获取完整的使用指南：
+
+- [配置文件说明](docs/configuration.md)
+- [路由系统](docs/router.md)
+- [状态管理 (Pinia)](docs/pinia.md)
+- [国际化 (i18n)](docs/i18n.md)
+- [工具函数和自动导入](docs/auto-import.md)
+- [环境变量](docs/environment.md)
+- [测试](docs/testing.md)
+- [代码规范](docs/style-guide.md)
+- [VueUse](docs/vueuse.md)
+
