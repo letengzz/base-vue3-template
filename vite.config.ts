@@ -18,11 +18,11 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       VueRouter({
-        routesFolder: [
-          {
-            src: 'src/views',
-          },
-        ],
+        // routesFolder: [
+        //   {
+        //     src: 'src/views',
+        //   },
+        // ],
         dts: './types/typed-router.d.ts',
       }),
       Layouts({

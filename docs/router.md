@@ -8,16 +8,16 @@
 
 ### 路由文件生成
 
-项目配置了 VueRouter 插件，会自动扫描 src/views 目录下的 .vue 文件并生成路由配置。生成的类型声明文件位于 types/typed-router.d.ts。
+项目配置了 VueRouter 插件，会自动扫描 src/pages 目录下的 .vue 文件并生成路由配置。生成的类型声明文件位于 types/typed-router.d.ts。
 
 ```typescript [vite.config.ts]
 // vite.config.ts
 VueRouter({
-  routesFolder: [
-    {
-      src: 'src/views', // 自动扫描此目录生成路由
-    },
-  ],
+  //routesFolder: [
+  //  {
+  //    src: 'src/views', // 自动扫描此目录生成路由
+  //  },
+  //],
   dts: './types/typed-router.d.ts', // 路由类型声明文件
 })
 ```
@@ -27,7 +27,7 @@ VueRouter({
 views 目录下的文件结构会自动映射为路由路径：
 
 ```
-src/views/
+src/pages/
 ├── index.vue          -> /
 ├── demo.vue           -> /demo
 ├── i18n.vue           -> /i18n
@@ -37,7 +37,7 @@ src/views/
 如果需要创建嵌套路由，可以创建子目录：
 
 ```
-src/views/
+src/pages/
 ├── user/
 │   ├── index.vue      -> /user
 │   └── profile.vue    -> /user/profile
