@@ -76,7 +76,18 @@
 │   └── env.d.ts
 ├── docs/                   # 项目文档
 ├── .vscode/                # VS Code 配置
-└── ...                     # 配置文件
+├── .env                    # 环境变量
+├── vite.config.ts          # Vite 配置
+├── vitest.config.ts        # Vitest 配置
+├── playwright.config.ts    # Playwright 配置
+├── eslint.config.ts        # ESLint 配置
+├── stylelint.config.mjs    # Stylelint 配置
+├── tsconfig.json           # TypeScript 配置
+├── tsconfig.app.json       # TypeScript App 配置
+├── tsconfig.node.json      # TypeScript Node 配置
+├── tsconfig.vitest.json    # TypeScript Vitest 配置
+├── package.json            # 项目依赖
+└── index.html              # HTML 入口                   # 配置文件
 ```
 
 ## 命令速查表
