@@ -12,6 +12,9 @@ import { VueRouterAutoImports } from 'unplugin-vue-router'
 import Components from 'unplugin-vue-components/vite'
 import UnoCSS from 'unocss/vite'// 导入 UnoCSS 插件
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import vueI18n from '@intlify/unplugin-vue-i18n/vite'
+import path from 'node:path'
+
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -67,7 +70,17 @@ export default defineConfig(({ mode }) => {
         iconDirs: [fileURLToPath(new URL('./src/assets/icons', import.meta.url))],
         // 生成的 symbol ID 格式
         symbolId: 'icon-[dir]-[name]'
-      })
+      }),
+      vueI18n({
+        // 语言包目录
+        include: path.resolve(__dirname, './src/i18n/locales/**'),
+        // 开发模式下也启动编译时处理
+        runtimeOnly: false,
+        // 仅使用组合式 API
+        compositionOnly: true,
+        // 完整安装
+        fullInstall: true,
+      }),
     ],
     resolve: {
       alias: {
