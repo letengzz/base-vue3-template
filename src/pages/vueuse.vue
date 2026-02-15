@@ -91,7 +91,6 @@ const mouse = useMouse()
 const name = useLocalStorage('user-name', '')
 
 // 3. 主题切换
-// const isDark = useDark()
 const isDark = useDark({
   selector: 'html',
   attribute: 'data-theme',
