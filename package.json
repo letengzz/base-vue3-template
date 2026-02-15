@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": "^20.19.0 || >=22.12.0"
+    "node": "^20.19.0 || >=22.12.0",
+    "pnpm": ">=10"
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
