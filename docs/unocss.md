@@ -432,6 +432,91 @@ presets: [
 - `i-heroicons-*` - Heroicons
 - `i-lucide-*` - Lucide Icons
 
+## Icon 组件
+
+项目提供了统一的 `Icon` 组件，支持多种图标类型：
+
+### 组件属性
+
+| 属性 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `type` | `'uno' \| 'iconify' \| 'svg' \| 'iconfont'` | `'iconify'` | 图标类型 |
+| `icon` | `string` | - | 图标名称（必填） |
+| `prefix` | `string` | `'icon'` | SVG 图标前缀 |
+| `fontFamily` | `string` | `'iconfont'` | IconFont 字体名称 |
+| `fontUrl` | `string` | - | IconFont CSS 链接地址 |
+
+### Iconify 图标（默认）
+
+使用 `@iconify/vue` 渲染，支持所有 Iconify 图标库：
+
+```vue:no-line-numbers
+<!-- 使用 Material Design Icons -->
+<icon type="iconify" icon="mdi:user" class="size-8 text-primary" />
+
+<!-- 使用 Carbon 图标 -->
+<icon type="iconify" icon="carbon:home" class="text-lg" />
+```
+
+图标查询：[Iconify 图标库](https://icon-sets.iconify.design/)
+
+### UnoCSS 图标
+
+使用 UnoCSS Preset Icons 渲染：
+
+```vue:no-line-numbers
+<icon type="uno" icon="i-mdi:user" class="size-8 text-primary" />
+<icon type="uno" icon="i-carbon:settings" class="text-2xl" />
+```
+
+图标查询：[Icônes](https://icones.js.org/)
+
+### 本地 SVG 图标
+
+使用 SVG Symbol 方式引用本地图标：
+
+```vue:no-line-numbers
+<icon type="svg" icon="demo" class="text-primary size-8" />
+```
+
+需要先在项目中注册 SVG 图标，使用 `vite-plugin-svg-icons` 插件。
+
+### IconFont 图标
+
+支持阿里巴巴 IconFont 图标：
+
+```vue:no-line-numbers
+<icon
+  type="iconfont"
+  font-url="//at.alicdn.com/t/c/font_xxxxxx.css"
+  icon="mobile-alt"
+  class="text-primary text-2xl"
+/>
+```
+
+组件会自动加载 IconFont 的 CSS 文件。
+
+### 直接使用 UnoCSS 图标类
+
+除了 Icon 组件，也可以直接在模板中使用 UnoCSS 图标类：
+
+```htm
+<!-- Phosphor 图标 -->
+<div class="i-ph-anchor-simple-thin" />
+
+<!-- Material Design Icons 带颜色 -->
+<i class="i-mdi-alarm text-orange-400" />
+
+<!-- Vue Logo -->
+<div class="i-logos-vue text-3xl" />
+
+<!-- 深色/浅色模式切换图标 -->
+<button class="i-carbon-sun dark:i-carbon-moon" />
+
+<!-- 悬停切换图标 -->
+<div class="i-twemoji-grinning-face-with-smiling-eyes hover:i-twemoji-face-with-tears-of-joy" />
+```
+
 ## 指令转换器
 
 ### @apply 指令

@@ -11,6 +11,7 @@ import AutoImport from 'unplugin-auto-import/vite'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
 import Components from 'unplugin-vue-components/vite'
 import UnoCSS from 'unocss/vite'// 导入 UnoCSS 插件
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -59,7 +60,14 @@ export default defineConfig(({ mode }) => {
         directoryAsNamespace: false,
         dts: './types/components.d.ts' // 生成组件类型声明文件的路径
       }),
-      UnoCSS()
+      UnoCSS(),
+      // 配置 SVG 图标插件
+      createSvgIconsPlugin({
+        // SVG 图标目录
+        iconDirs: [fileURLToPath(new URL('./src/assets/icons', import.meta.url))],
+        // 生成的 symbol ID 格式
+        symbolId: 'icon-[dir]-[name]'
+      })
     ],
     resolve: {
       alias: {

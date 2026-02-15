@@ -9,6 +9,7 @@
 - **状态管理**: Pinia + pinia-plugin-persistedstate
 - **路由**: Vue Router 4 + unplugin-vue-router (基于文件的路由)
 - **样式引擎**: UnoCSS (原子化 CSS) + SCSS
+- **图标方案**: UnoCSS Icons + Iconify + IconFont + 本地 SVG
 - **国际化**: Vue i18n
 - **工具库**: @VueUse/core
 - **自动化**: unplugin-auto-import (自动导入 API) + unplugin-vue-components (自动导入组件)
@@ -35,6 +36,8 @@
 ```
 src/
 ├── assets/                 # 静态资源
+│   ├── icons/             # SVG 图标文件
+│   │   └── demo.svg
 │   └── scss/              # SCSS 样式文件
 │       ├── index.scss     # SCSS 主入口
 │       ├── settings/      # 变量定义
@@ -43,7 +46,11 @@ src/
 │       │   └── index.scss
 │       └── base/          # 基础样式
 │           └── index.scss
+├── components/            # 公共组件
+│   └── icon/              # Icon 图标组件
+│       └── icon.vue
 ├── __tests__/              # 单元测试文件
+│   └── App.spec.ts
 ├── i18n/                   # 国际化配置
 │   ├── locales/           # 语言包
 │   │   ├── en-US.ts
@@ -51,6 +58,14 @@ src/
 │   └── index.ts
 ├── layouts/                # 布局组件
 │   └── default.vue
+├── pages/                  # 页面组件（基于文件的路由）
+│   ├── demo.vue
+│   ├── i18n.vue
+│   ├── index.vue
+│   ├── uno.vue
+│   └── vueuse.vue
+├── plugins/                # 插件配置
+│   └── assets.ts
 ├── router/                 # 路由配置
 │   └── index.ts
 ├── stores/                 # Pinia 状态管理
@@ -59,11 +74,6 @@ src/
 │       └── demo.ts
 ├── utils/                  # 工具函数
 │   └── env.ts
-├── views/                  # 页面组件
-│   ├── demo.vue
-│   ├── i18n.vue
-│   ├── index.vue
-│   └── vueuse.vue
 ├── App.vue                # 根组件
 ├── main.ts                # 入口文件
 └── env.d.ts               # 类型声明文件
@@ -71,19 +81,17 @@ src/
 
 ## 命令速查表
 
-
-| 命令              | 描述                         |
-| ----------------- | ---------------------------- |
-| `pnpm dev`        | 启动开发服务器               |
-| `pnpm build`      | 构建生产版本（包含类型检查） |
-| `pnpm preview`    | 预览构建后的产物             |
-| `pnpm type-check` | 执行 TypeScript 类型检查     |
-| `pnpm test:unit`  | 运行单元测试                 |
-| `pnpm test:e2e`   | 运行 E2E 测试                |
-| `pnpm lint`       | 自动修复 ESLint 错误         |
-| `pnpm lint:stylelint` | 自动修复 Stylelint 错误  |
-| `pnpm format`     | 格式化 src 目录下的代码      |
-
+| 命令                  | 描述                         |
+| --------------------- | ---------------------------- |
+| `pnpm dev`            | 启动开发服务器               |
+| `pnpm build`          | 构建生产版本（包含类型检查） |
+| `pnpm preview`        | 预览构建后的产物             |
+| `pnpm type-check`     | 执行 TypeScript 类型检查     |
+| `pnpm test:unit`      | 运行单元测试                 |
+| `pnpm test:e2e`       | 运行 E2E 测试                |
+| `pnpm lint`           | 自动修复 ESLint 错误         |
+| `pnpm lint:stylelint` | 自动修复 Stylelint 错误      |
+| `pnpm format`         | 格式化 src 目录下的代码      |
 
 ## 快速开始
 
@@ -156,7 +164,6 @@ pnpm format
 - [Vue - Official (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
 - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) (浏览器扩展)
 
-
 ## 详细文档
 
 请查阅 [docs/README.md](docs/README.md) 获取完整的使用指南：
@@ -171,5 +178,4 @@ pnpm format
 - [代码规范](docs/style-guide.md)
 - [VueUse](docs/vueuse.md)
 - [SCSS](docs/scss.md)
-- [UnoCSS](docs/unocss.md)
-
+- [UnoCSS & 图标](docs/unocss.md)
