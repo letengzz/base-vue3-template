@@ -16,9 +16,9 @@ export default {
     // },
     // 选sass可以注释上面的less
     {
-      files: ['*.scss', '**/*.scss'],
+      files: ['*.scss', '**/*.scss', '**/*.vue'],
       customSyntax: 'postcss-scss',
-      rule: {
+      rules: {
         'scss/percent-placeholder-pattern': null,
         'scss/at-mixin-pattern': null,
       },
