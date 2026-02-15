@@ -1,11 +1,7 @@
 <template>
   <div class="flex gap-2">
-    <button
-      v-for="lang in languages"
-      :key="lang.value"
-      :class="{ active: currentLocale === lang.value }"
-      @click="onChangeLanguage(lang.value)"
-    >
+    <button v-for="lang in languages" :key="lang.value" :class="{ active: currentLocale === lang.value }"
+      @click="onChangeLanguage(lang.value)">
       {{ lang.label }}
     </button>
   </div>
