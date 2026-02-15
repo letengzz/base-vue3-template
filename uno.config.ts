@@ -77,10 +77,17 @@ export default defineConfig({
       [`text-${color}-dark-2`, { color: `var(--wm-color-${color}-dark-2)` }],
     ]),
   ],
-
+  //自定义属性 一个属性可以对应多个unocss类值
   shortcuts: {
-    // 布局
+    //垂直水平居中
     'flex-center': 'flex justify-center items-center',
-    'flex-col-center': 'flex flex-col justify-center items-center',
+    //放在最后
+    'flex-col-end': 'flex justify-end items-center',
+    //垂直居中
+    'flex-middle': 'flex items-center',
+    //分开两边
+    'flex-between': 'flex justify-between items-center',
+    //竖直居中
+    'flex-col-center': 'flex flex-col justify-center',
   },
 })
