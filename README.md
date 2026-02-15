@@ -85,7 +85,6 @@
 ├── docs/                   # 项目文档
 ├── .vscode/                # VS Code 配置
 ├── .env                    # 环境变量
-├── uno.config.ts           # UnoCSS 配置
 ├── vite.config.ts          # Vite 配置
 ├── vitest.config.ts        # Vitest 配置
 ├── playwright.config.ts    # Playwright 配置
@@ -96,7 +95,8 @@
 ├── tsconfig.node.json      # TypeScript Node 配置
 ├── tsconfig.vitest.json    # TypeScript Vitest 配置
 ├── package.json            # 项目依赖
-└── index.html              # HTML 入口
+├── uno.config.ts           # UnoCSS 配置
+└── index.html              # HTML 入口                   # 配置文件
 ```
 
 ## 命令速查表
