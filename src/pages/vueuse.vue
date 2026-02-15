@@ -42,11 +42,7 @@
     <section class="demo-section">
       <h2>6. 防抖函数 (useDebounceFn)</h2>
       <div class="input-group">
-        <input
-          v-model="debouncedText"
-          @input="handleInput"
-          placeholder="输入内容后等待500ms显示"
-        />
+        <input v-model="debouncedText" @input="handleInput" placeholder="输入内容后等待500ms显示" />
         <p>防抖结果: {{ debouncedText }}</p>
       </div>
     </section>
@@ -95,7 +91,12 @@ const mouse = useMouse()
 const name = useLocalStorage('user-name', '')
 
 // 3. 主题切换
-const isDark = useDark()
+const isDark = useDark({
+  selector: 'html',
+  attribute: 'data-theme',
+  valueDark: 'dark',
+  valueLight: 'light',
+})
 const toggleDark = useToggle(isDark)
 
 // 4. 剪贴板操作
@@ -212,7 +213,7 @@ onMounted(() => {
   padding: 20px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
-  background: #fafafa;
+  background-color: var(--wm-bg-color-page);
 }
 
 h1 {
