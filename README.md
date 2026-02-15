@@ -8,6 +8,7 @@
 - **框架**: Vue 3.5 + TypeScript
 - **状态管理**: Pinia + pinia-plugin-persistedstate
 - **路由**: Vue Router 4 + unplugin-vue-router (基于文件的路由)
+- **样式引擎**: UnoCSS (原子化 CSS) + SCSS
 - **国际化**: Vue i18n
 - **工具库**: @VueUse/core
 - **自动化**: unplugin-auto-import (自动导入 API) + unplugin-vue-components (自动导入组件)

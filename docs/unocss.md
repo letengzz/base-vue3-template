@@ -280,9 +280,16 @@ theme: {
 ```typescript:no-line-numbers
 // uno.config.ts
 shortcuts: {
-  // 布局
+  // 垂直水平居中
   'flex-center': 'flex justify-center items-center',
-  'flex-col-center': 'flex flex-col justify-center items-center',
+  // 放在最后（水平居右）
+  'flex-col-end': 'flex justify-end items-center',
+  // 垂直居中
+  'flex-middle': 'flex items-center',
+  // 分开两边
+  'flex-between': 'flex justify-between items-center',
+  // 竖直居中（垂直排列居中）
+  'flex-col-center': 'flex flex-col justify-center',
 }
 ```
 
@@ -294,7 +301,23 @@ shortcuts: {
   <p>水平垂直居中</p>
 </div>
 
-<!-- flex-col-center = flex flex-col justify-center items-center -->
+<!-- flex-col-end = flex justify-end items-center -->
+<div class="flex-col-end">
+  <p>内容靠右对齐</p>
+</div>
+
+<!-- flex-middle = flex items-center -->
+<div class="flex-middle">
+  <p>垂直居中（水平排列）</p>
+</div>
+
+<!-- flex-between = flex justify-between items-center -->
+<div class="flex-between">
+  <span>左侧内容</span>
+  <span>右侧内容</span>
+</div>
+
+<!-- flex-col-center = flex flex-col justify-center -->
 <div class="flex-col-center h-screen">
   <p>垂直排列居中</p>
 </div>
