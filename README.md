@@ -34,49 +34,69 @@
 ## 目录结构
 
 ```
-src/
-├── assets/                 # 静态资源
-│   ├── icons/             # SVG 图标文件
-│   │   └── demo.svg
-│   └── scss/              # SCSS 样式文件
-│       ├── index.scss     # SCSS 主入口
-│       ├── settings/      # 变量定义
-│       │   ├── _color.scss
-│       │   ├── _size.scss
-│       │   └── index.scss
-│       └── base/          # 基础样式
-│           └── index.scss
-├── components/            # 公共组件
-│   └── icon/              # Icon 图标组件
-│       └── icon.vue
-├── __tests__/              # 单元测试文件
-│   └── App.spec.ts
-├── i18n/                   # 国际化配置
-│   ├── locales/           # 语言包
-│   │   ├── en-US.ts
-│   │   └── zh-CN.ts
-│   └── index.ts
-├── layouts/                # 布局组件
-│   └── default.vue
-├── pages/                  # 页面组件（基于文件的路由）
-│   ├── demo.vue
-│   ├── i18n.vue
-│   ├── index.vue
-│   ├── uno.vue
-│   └── vueuse.vue
-├── plugins/                # 插件配置
-│   └── assets.ts
-├── router/                 # 路由配置
-│   └── index.ts
-├── stores/                 # Pinia 状态管理
-│   ├── index.ts           # store 根文件
-│   └── modules/           # store 模块
-│       └── demo.ts
-├── utils/                  # 工具函数
-│   └── env.ts
-├── App.vue                # 根组件
-├── main.ts                # 入口文件
-└── env.d.ts               # 类型声明文件
+├── e2e/                    # E2E 测试文件
+│   ├── tsconfig.json
+│   └── vue.spec.ts
+├── public/                 # 静态资源
+│   └── favicon.ico
+├── src/                    # 源代码目录
+│   ├── __tests__/          # 单元测试文件
+│   ├── assets/             # 资源文件
+│   │   ├── icons/          # SVG 图标
+│   │   │   └── demo.svg
+│   │   └── scss/           # SCSS 样式文件
+│   │       ├── base/       # 基础样式
+│   │       │   └── index.scss
+│   │       ├── settings/   # 样式变量配置
+│   │       │   ├── _color.scss
+│   │       │   ├── _size.scss
+│   │       │   └── index.scss
+│   │       └── index.scss
+│   ├── components/         # 公共组件
+│   │   └── icon/
+│   │       └── icon.vue
+│   ├── i18n/               # 国际化配置
+│   │   ├── locales/        # 语言包
+│   │   │   ├── en-US.ts
+│   │   │   └── zh-CN.ts
+│   │   └── index.ts
+│   ├── layouts/            # 布局组件
+│   │   └── default.vue
+│   ├── pages/              # 页面组件 (基于文件的路由)
+│   │   ├── demo.vue
+│   │   ├── i18n.vue
+│   │   ├── index.vue
+│   │   ├── uno.vue
+│   │   └── vueuse.vue
+│   ├── plugins/            # 插件配置
+│   │   └── assets.ts
+│   ├── router/             # 路由配置
+│   │   └── index.ts
+│   ├── stores/             # Pinia 状态管理
+│   │   ├── modules/        # store 模块
+│   │   │   └── demo.ts
+│   │   └── index.ts
+│   ├── utils/              # 工具函数
+│   │   └── env.ts
+│   ├── App.vue             # 根组件
+│   └── main.ts             # 入口文件
+├── types/                  # 全局类型声明
+│   └── env.d.ts
+├── docs/                   # 项目文档
+├── .vscode/                # VS Code 配置
+├── .env                    # 环境变量
+├── uno.config.ts           # UnoCSS 配置
+├── vite.config.ts          # Vite 配置
+├── vitest.config.ts        # Vitest 配置
+├── playwright.config.ts    # Playwright 配置
+├── eslint.config.ts        # ESLint 配置
+├── stylelint.config.mjs    # Stylelint 配置
+├── tsconfig.json           # TypeScript 配置
+├── tsconfig.app.json       # TypeScript App 配置
+├── tsconfig.node.json      # TypeScript Node 配置
+├── tsconfig.vitest.json    # TypeScript Vitest 配置
+├── package.json            # 项目依赖
+└── index.html              # HTML 入口
 ```
 
 ## 命令速查表
@@ -92,6 +112,17 @@ src/
 | `pnpm lint`           | 自动修复 ESLint 错误         |
 | `pnpm lint:stylelint` | 自动修复 Stylelint 错误      |
 | `pnpm format`         | 格式化 src 目录下的代码      |
+
+| 命令              | 描述                         |
+| ----------------- | ---------------------------- |
+| `pnpm dev`        | 启动开发服务器               |
+| `pnpm build`      | 构建生产版本（包含类型检查） |
+| `pnpm preview`    | 预览构建后的产物             |
+| `pnpm type-check` | 执行 TypeScript 类型检查     |
+| `pnpm test:unit`  | 运行单元测试                 |
+| `pnpm test:e2e`   | 运行 E2E 测试                |
+| `pnpm lint`       | 自动修复 ESLint 错误         |
+| `pnpm format`     | 格式化 src 目录下的代码      |
 
 ## 快速开始
 
@@ -166,6 +197,8 @@ pnpm format
 
 ## 详细文档
 
+## 📚 详细文档
+
 请查阅 [docs/README.md](docs/README.md) 获取完整的使用指南：
 
 - [配置文件说明](docs/configuration.md)
@@ -177,5 +210,3 @@ pnpm format
 - [测试](docs/testing.md)
 - [代码规范](docs/style-guide.md)
 - [VueUse](docs/vueuse.md)
-- [SCSS](docs/scss.md)
-- [UnoCSS & 图标](docs/unocss.md)
