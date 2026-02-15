@@ -68,7 +68,6 @@
 ├── vitest.config.ts        # Vitest 配置
 ├── playwright.config.ts    # Playwright 配置
 ├── eslint.config.ts        # ESLint 配置
-├── stylelint.config.mjs    # Stylelint 配置
 ├── tsconfig.json           # TypeScript 配置
 ├── tsconfig.app.json       # TypeScript App 配置
 ├── tsconfig.node.json      # TypeScript Node 配置
@@ -89,6 +88,34 @@
 | `pnpm test:e2e`   | 运行 E2E 测试                |
 | `pnpm lint`       | 自动修复 ESLint 错误         |
 | `pnpm format`     | 格式化 src 目录下的代码      |
+
+## 基于此模板创建新项目
+
+可以通用 -b 指定要拉取的分支
+
+1. 拉取最简模板（master分支）
+
+   ```bash
+   git clone git@github.com:letengzz/base-vue3-template.git --depth 1 -b master your-project-name
+   ```
+
+2. 拉取集成SCSS模板（scss分支）
+
+   ```bash
+   git clone git@github.com:letengzz/base-vue3-template.git --depth 1 -b scss your-project-name
+   ```
+
+3. 拉取SCSS+UnoCSS模板（scss-uno分支）
+
+   ```bash
+   git clone git@github.com:letengzz/base-vue3-template.git --depth 1 -b scss-uno your-project-name
+   ```
+
+## 分支说明
+
+- master: 最简模板代码
+- scss：集成 SCSS
+- scss-uno：集成 SCSS、UnoCSS
 
 ## 快速开始
 
@@ -155,15 +182,9 @@ pnpm lint
 pnpm format
 ```
 
-## 推荐 IDE 配置
+## 详细文档
 
-- [VS Code](https://code.visualstudio.com/)
-- [Vue - Official (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
-- [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) (浏览器扩展)
-
-## 📚 详细文档
-
-请查阅 [docs/README.md](docs/README.md) 获取完整的使用指南：
+使用指南：
 
 - [配置文件说明](docs/configuration.md)
 - [路由系统](docs/router.md)
