@@ -30,31 +30,40 @@
 ## 目录结构
 
 ```
-src/
-├── __tests__/              # 单元测试文件
-├── i18n/                   # 国际化配置
-│   ├── locales/           # 语言包
-│   │   ├── en-US.ts
-│   │   └── zh-CN.ts
-│   └── index.ts
-├── layouts/                # 布局组件
-│   └── default.vue
-├── router/                 # 路由配置
-│   └── index.ts
-├── stores/                 # Pinia 状态管理
-│   ├── index.ts           # store 根文件
-│   └── modules/           # store 模块
-│       └── demo.ts
-├── utils/                  # 工具函数
-│   └── env.ts
-├── views/                  # 页面组件
-│   ├── demo.vue
-│   ├── i18n.vue
-│   ├── index.vue
-│   └── vueuse.vue
-├── App.vue                # 根组件
-├── main.ts                # 入口文件
-└── env.d.ts               # 类型声明文件
+├── e2e/                    # E2E 测试文件
+│   ├── tsconfig.json
+│   └── vue.spec.ts
+├── public/                 # 静态资源
+│   └── favicon.ico
+├── src/                    # 源代码目录
+│   ├── __tests__/          # 单元测试文件
+│   ├── i18n/               # 国际化配置
+│   │   ├── locales/        # 语言包
+│   │   │   ├── en-US.ts
+│   │   │   └── zh-CN.ts
+│   │   └── index.ts
+│   ├── layouts/            # 布局组件
+│   │   └── default.vue
+│   ├── pages/              # 页面组件 (基于文件的路由)
+│   │   ├── demo.vue
+│   │   ├── i18n.vue
+│   │   ├── index.vue
+│   │   └── vueuse.vue
+│   ├── router/             # 路由配置
+│   │   └── index.ts
+│   ├── stores/             # Pinia 状态管理
+│   │   ├── modules/        # store 模块
+│   │   │   └── demo.ts
+│   │   └── index.ts
+│   ├── utils/              # 工具函数
+│   │   └── env.ts
+│   ├── App.vue             # 根组件
+│   └── main.ts             # 入口文件
+├── types/                  # 全局类型声明
+│   └── env.d.ts
+├── docs/                   # 项目文档
+├── .vscode/                # VS Code 配置
+└── ...                     # 配置文件
 ```
 
 ## 命令速查表
