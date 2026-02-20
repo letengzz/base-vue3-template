@@ -40,3 +40,4 @@ playwright-report/
 /types/auto-imports.d.ts
 /pnpm-lock.yaml
 /.eslintrc-auto-import.json
+/stats.html

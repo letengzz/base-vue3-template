@@ -1,14 +1,5 @@
 # 配置文件说明
 
-## 项目技术栈
-
-- **构建工具**: Vite 7.3.0
-- **框架**: Vue 3.5.26 + TypeScript 5.9.3
-- **路由**: Vue Router 4.6.4 (使用 unplugin-vue-router 实现自动路由)
-- **状态管理**: Pinia 3.0.4 (含持久化插件)
-- **国际化**: Vue I18n 11
-- **工具库**: VueUse Core 14.2.0
-
 ## 核心配置
 
 ### Vite 配置详解
@@ -127,51 +118,5 @@ export default [
 - src/components 目录下所有 Vue 组件
 - 支持组件按目录命名空间自动识别
 
-## 构建命令
 
-```bash
-# 安装依赖
-pnpm install
 
-# 开发模式
-pnpm dev
-
-# 生产构建
-pnpm build
-
-# 类型检查
-pnpm type-check
-
-# 代码格式化
-pnpm format
-
-# 代码检查并修复
-pnpm lint
-
-# 单元测试
-pnpm test:unit
-
-# E2E 测试
-pnpm test:e2e
-```
-
-## 目录结构
-
-```
-base-vue3-template/
-├── src/
-│   ├── __tests__/          # 单元测试文件
-│   ├── api/                # API 接口 (自动导入)
-│   ├── components/         # 组件 (自动注册)
-│   ├── i18n/              # 国际化配置
-│   │   └── locales/       # 语言文件
-│   ├── layouts/           # 布局组件
-│   ├── router/            # 路由配置
-│   ├── stores/            # Pinia 状态管理
-│   │   └── modules/       # Store 模块
-│   ├── utils/             # 工具函数 (自动导入)
-│   └── views/             # 页面视图 (自动生成路由)
-├── types/                 # TypeScript 类型声明
-├── docs/                  # 项目文档
-└── 配置文件               # vite.config.ts, tsconfig.json, etc.
-```
