@@ -12,6 +12,10 @@ import { VueRouterAutoImports } from 'unplugin-vue-router'
 import Components from 'unplugin-vue-components/vite'
 import vueI18n from '@intlify/unplugin-vue-i18n/vite'
 import path from 'node:path'
+import { compression } from 'vite-plugin-compression2'
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
+import legacy from '@vitejs/plugin-legacy'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -70,7 +74,65 @@ export default defineConfig(({ mode }) => {
         // 完整安装
         fullInstall: true,
       }),
+      // Gzip 压缩
+      compression({
+        algorithms: ['gzip'],
+        threshold: 10240, // 超过 10KB 的文件才压缩
+        deleteOriginalAssets: false, // 不删除原文件
+      }),
+      ViteImageOptimizer({
+        png: {
+          quality: 80,
+        },
+        jpeg: {
+          quality: 80,
+        },
+        webp: {
+          quality: 80,
+        },
+      }),
+      legacy({
+        targets: ['defaults', 'not IE 11'],
+      }),
+      visualizer({
+        filename: 'stats.html',
+      }),
     ],
+    build: {
+      outDir: 'dist',
+      assetsDir: 'assets',
+      assetsInlineLimit: 4096,
+      reportCompressedSize: true,
+      cssCodeSplit: true,
+      minify: 'terser',
+      sourcemap: false,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['vue', 'vue-router', 'pinia'],
+          },
+        },
+      },
+      terserOptions: {
+        // 代码压缩配置
+        compress: {
+          drop_console: true, // 移除 console
+          drop_debugger: true, // 移除 debugger
+        },
+        // 代码混淆配置
+        mangle: {
+          toplevel: true, // 混淆顶层变量名
+          eval: true, // 混淆 eval 中的变量
+        },
+        // 输出配置
+        format: {
+          comments: false,
+        },
+      }
+    },
+    optimizeDeps: {
+      include: ['vue', 'vue-router', 'pinia', '@vueuse/core'],
+    },
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
