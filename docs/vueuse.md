@@ -1,14 +1,18 @@
 # VueUse
 
-## 概述
-
 本项目集成了 `@vueuse/core` - 一个基于 Vue 3 组合式 API 的实用工具库。它提供了大量响应式的工具函数，简化了常见开发场景。
+
+## 相关资源
+
+- [VueUse 官方文档](https://vueuse.org/)
+- [VueUse GitHub 仓库](https://github.com/vueuse/vueuse)
+- [API 参考](https://vueuse.org/functions.html)
 
 ## 自动导入
 
 VueUse 的所有 API 都已经配置为自动导入，无需手动 import 即可在组件中使用：
 
-```typescript:no-line-numbers
+```typescript
 // 以下所有函数都可以直接使用，无需导入
 const mouse = useMouse()
 const isDark = useDark()
@@ -21,7 +25,7 @@ const { copy, copied } = useClipboard()
 
 追踪鼠标在页面中的位置：
 
-```typescript:no-line-numbers
+```typescript
 const mouse = useMouse()
 
 console.log(mouse.x) // 鼠标 X 坐标
@@ -29,7 +33,7 @@ console.log(mouse.y) // 鼠标 Y 坐标
 console.log(mouse.pressure) // 鼠标按压力度（支持的设备）
 ```
 
-```vue:no-line-numbers
+```vue
 <template>
   <p>当前鼠标位置: x: {{ mouse.x }}, y: {{ mouse.y }}</p>
 </template>
@@ -39,7 +43,7 @@ console.log(mouse.pressure) // 鼠标按压力度（支持的设备）
 
 响应式的 localStorage 绑定，自动同步数据：
 
-```typescript:no-line-numbers
+```typescript
 // 创建一个响应式本地存储
 const name = useLocalStorage('user-name', '默认值')
 
@@ -51,7 +55,7 @@ console.log(name.value) // '张三'
 // 刷新页面后数据仍然存在
 ```
 
-```vue:no-line-numbers
+```vue
 <template>
   <input v-model="name" placeholder="输入你的名字" />
   <p>保存的名字: {{ name }}</p>
@@ -62,7 +66,7 @@ console.log(name.value) // '张三'
 
 深色/浅色主题切换：
 
-```typescript:no-line-numbers
+```typescript
 // 创建深色模式响应式状态
 const isDark = useDark()
 
@@ -73,7 +77,7 @@ const toggleDark = useToggle(isDark)
 toggleDark() // 切换主题
 ```
 
-```vue:no-line-numbers
+```vue
 <template>
   <button @click="toggleDark()">
     {{ isDark ? '切换到亮色模式' : '切换到暗色模式' }}
@@ -85,7 +89,7 @@ toggleDark() // 切换主题
 
 复制和读取剪贴板内容：
 
-```typescript:no-line-numbers
+```typescript
 const { copy, copied, isSupported } = useClipboard()
 
 // 复制文本
@@ -94,7 +98,7 @@ await copy('要复制的文本')
 console.log(copied.value) // true（复制完成后为 true）
 ```
 
-```vue:no-line-numbers
+```vue
 <template>
   <input v-model="textToCopy" placeholder="输入要复制的内容" />
   <button @click="copyText">复制到剪贴板</button>
@@ -115,14 +119,14 @@ const copyText = async () => {
 
 响应式窗口尺寸：
 
-```typescript:no-line-numbers
+```typescript
 const { width, height } = useWindowSize()
 
 console.log(width.value)  // 窗口宽度
 console.log(height.value) // 窗口高度
 ```
 
-```vue:no-line-numbers
+```vue
 <template>
   <p>窗口宽度: {{ width }}px</p>
   <p>窗口高度: {{ height }}px</p>
@@ -133,7 +137,7 @@ console.log(height.value) // 窗口高度
 
 延迟执行函数，避免频繁触发：
 
-```typescript:no-line-numbers
+```typescript
 const debouncedFn = useDebounceFn(() => {
   // 实际执行的逻辑
   console.log('执行')
@@ -145,7 +149,7 @@ debouncedFn()
 debouncedFn() // 只执行最后一次
 ```
 
-```vue:no-line-numbers
+```vue
 <template>
   <input v-model="value" @input="handleInput" />
   <p>防抖结果: {{ debouncedValue }}</p>
@@ -166,7 +170,7 @@ const handleInput = useDebounceFn((event: Event) => {
 
 检测点击是否发生在元素外部：
 
-```typescript:no-line-numbers
+```typescript
 const target = ref<HTMLElement | null>(null)
 const isOpen = ref(false)
 
@@ -175,7 +179,7 @@ onClickOutside(target, () => {
 })
 ```
 
-```vue:no-line-numbers
+```vue
 <template>
   <div ref="target" class="dropdown" :class="{ open: isOpen }">
     <p>点击状态: {{ isOpen ? '打开' : '关闭' }}</p>
@@ -196,7 +200,7 @@ onClickOutside(target, () => {
 
 可控制的定时器：
 
-```typescript:no-line-numbers
+```typescript
 // 创建定时器
 const counter = useIntervalFn(() => {
   count.value++
@@ -212,7 +216,7 @@ const counter = ref(0)
 useInterval(counter, 1000)
 ```
 
-```vue:no-line-numbers
+```vue
 <template>
   <p>计数: {{ count }}</p>
   <button @click="start">开始</button>
@@ -240,7 +244,7 @@ const reset = () => {
 
 响应式媒体查询：
 
-```typescript:no-line-numbers
+```typescript
 const isLargeScreen = useMediaQuery('(min-width: 768px)')
 const prefersDark = useMediaQuery('(prefers-color-scheme: dark)')
 const isPortrait = useMediaQuery('(orientation: portrait)')
@@ -248,7 +252,7 @@ const isPortrait = useMediaQuery('(orientation: portrait)')
 console.log(isLargeScreen.value) // true / false
 ```
 
-```vue:no-line-numbers
+```vue
 <template>
   <p>大屏幕: {{ isLargeScreen }}</p>
   <p>深色模式: {{ prefersDark }}</p>
@@ -259,7 +263,7 @@ console.log(isLargeScreen.value) // true / false
 
 简洁的 HTTP 请求：
 
-```typescript:no-line-numbers
+```typescript
 // 基础用法
 const { data, error, isLoading } = await useFetch('/api/user')
 
@@ -273,7 +277,7 @@ const { data } = await useFetch('/api/user', {
 })
 ```
 
-```vue:no-line-numbers
+```vue
 <template>
   <div v-if="isLoading">加载中...</div>
   <div v-else-if="error">错误: {{ error.message }}</div>
@@ -291,7 +295,7 @@ const { data, error, isLoading } = await useFetch('/api/todos/1')
 
 ### 响应式操作
 
-```typescript:no-line-numbers
+```typescript
 import { useRefs, useToRefs, useArray } from '@vueuse/core'
 
 // 将对象转换为 refs
@@ -307,7 +311,7 @@ const [count, name, age] = useRefs(0, '张三', 25)
 
 ### 事件监听
 
-```typescript:no-line-numbers
+```typescript
 // 监听窗口滚动
 const { x, y } = useWindowScroll()
 
@@ -323,7 +327,7 @@ const { isVisible } = usePageVisibility()
 
 ### 状态管理
 
-```typescript:no-line-numbers
+```typescript
 // 会话存储
 const session = useSessionStorage('key', '默认值')
 
@@ -336,7 +340,7 @@ const { merged } = useMemoize(fn)
 
 ### DOM 操作
 
-```typescript:no-line-numbers
+```typescript
 // 元素尺寸
 const el = ref<HTMLElement | null>(null)
 const { width, height } = useElementSize(el)
@@ -355,7 +359,7 @@ const { width, height } = useResizable(el)
 
 ### 时间相关
 
-```typescript:no-line-numbers
+```typescript
 // 相对时间
 const ago = useTimeAgo(new Date())
 
@@ -369,7 +373,7 @@ const date = useDateFormat(now.value, 'YYYY-MM-DD')
 
 ### 其他实用功能
 
-```typescript:no-line-numbers
+```typescript
 // 复制文本到剪贴板
 const { copy, copied } = useCopy(text)
 
@@ -390,7 +394,7 @@ const id = useId()
 
 ### 带搜索建议的输入框
 
-```vue:no-line-numbers
+```vue
 <template>
   <div class="search-box">
     <input
@@ -434,7 +438,7 @@ onClickOutside(box, () => {
 
 ### 主题切换组件
 
-```vue:no-line-numbers
+```vue
 <template>
   <button @click="toggleTheme" :class="{ dark: isDark }">
     {{ isDark ? '🌙' : '☀️' }}
@@ -462,7 +466,7 @@ const toggleTheme = () => {
 
 ### 2. 组合使用
 
-```typescript:no-line-numbers
+```typescript
 // 创建响应式设置
 const settings = useLocalStorage('settings', {
   theme: 'light',
@@ -484,7 +488,7 @@ const columns = computed(() => {
 
 ### 3. 清理副作用
 
-```typescript:no-line-numbers
+```typescript
 // 大部分 VueUse 函数会自动清理
 // 但手动事件监听需要清理
 const el = ref<HTMLElement | null>(null)
@@ -502,8 +506,3 @@ onUnmounted(() => {
 })
 ```
 
-## 相关资源
-
-- [VueUse 官方文档](https://vueuse.org/)
-- [VueUse GitHub 仓库](https://github.com/vueuse/vueuse)
-- [API 参考](https://vueuse.org/functions.html)
