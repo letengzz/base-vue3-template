@@ -14,6 +14,11 @@ import UnoCSS from 'unocss/vite'// 导入 UnoCSS 插件
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import vueI18n from '@intlify/unplugin-vue-i18n/vite'
 import path from 'node:path'
+import { compression } from 'vite-plugin-compression2'
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
+import legacy from '@vitejs/plugin-legacy'
+import { visualizer } from 'rollup-plugin-visualizer'
+import checker from 'vite-plugin-checker'
 
 
 // https://vite.dev/config/
@@ -81,7 +86,95 @@ export default defineConfig(({ mode }) => {
         // 完整安装
         fullInstall: true,
       }),
+      // Gzip 压缩
+      compression({
+        algorithms: ['gzip'],
+        threshold: 10240, // 超过 10KB 的文件才压缩
+        deleteOriginalAssets: false, // 不删除原文件
+      }),
+      ViteImageOptimizer({
+        png: {
+          quality: 80,
+        },
+        jpeg: {
+          quality: 80,
+        },
+        webp: {
+          quality: 80,
+        },
+      }),
+      legacy({
+        targets: ['defaults', 'not IE 11'],
+      }),
+      visualizer({
+        filename: 'stats.html',
+      }),
+      checker({
+        eslint: {
+          useFlatConfig: true,
+          lintCommand: 'eslint "./src/**/*.{ts,tsx,vue}"',
+          dev: {
+            logLevel: ['error'],
+          },
+        },
+        overlay: {
+          initialIsOpen: true,
+        },
+      }),
     ],
+    build: {
+      outDir: 'dist',
+      assetsDir: 'assets',
+      // 4kb以下 转Base64
+      assetsInlineLimit: 4096,
+      // chunkSizeWarningLimit:1500, //配置文件大小提醒限制 默认为500
+      reportCompressedSize: true,
+      cssCodeSplit: true,
+      minify: 'terser',
+      sourcemap: false,
+      rollupOptions: {
+        output: {
+          // vendor 为自定义的文件块名称，可以自己定义，后面的数组为需要打包到这个块中的依赖包。
+          //通过这种配置，将 Vue 核心库、路由、状态管理打包到一个独立的文件中，而将应用的业务代码打包到其他独立的文件中，实现业务代码分离。
+          // manualChunks: {
+          //   vendor: ['vue', 'vue-router', 'pinia'],
+          // },
+          // 每个node_modules下的文件单独打包
+          manualChunks(id: string) {
+            if (id.includes('node_modules')) {
+              // return 'vendor' //第三方依赖合并在一起
+              // 抽离第三方依赖
+              // return id.toString().split('node_modules/.pnpm/')[1].split('/')[0].toString()
+              return id.toString().split('node_modules/')[1].split('/')[0].toString()
+            }
+            return undefined
+          },
+          // 用于从入口点创建的块的打包输出格式[name]表示文件名，[hash]表示该文件hash值
+          entryFileNames: 'assets/js/[name].[hash].js', // 用于命名代码拆分时创建的共享的输出命名
+          chunkFileNames: 'assets/js/[name].[hash].js', // 用于输出静态资源的命名，[ext]表示文件拓展名
+          assetFileNames: 'assets/[ext]/[name].[hash].[ext]',
+        },
+      },
+      terserOptions: {
+        // 代码压缩配置
+        compress: {
+          drop_console: true, // 移除 console
+          drop_debugger: true, // 移除 debugger
+        },
+        // 代码混淆配置
+        mangle: {
+          toplevel: true, // 混淆顶层变量名
+          eval: true, // 混淆 eval 中的变量
+        },
+        // 输出配置
+        format: {
+          comments: false,
+        },
+      }
+    },
+    optimizeDeps: {
+      include: ['vue', 'vue-router', 'pinia', '@vueuse/core'],
+    },
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),

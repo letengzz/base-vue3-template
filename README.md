@@ -14,6 +14,7 @@
 - **工具库**: @VueUse/core
 - **自动化**: unplugin-auto-import (自动导入 API) + unplugin-vue-components (自动导入组件)
 - **布局**: vite-plugin-vue-layouts
+- **构建优化**: vite-plugin-compression2 (Gzip压缩) + vite-plugin-image-optimizer (图片优化) + rollup-plugin-visualizer (构建分析)
 - **样式**: SCSS + CSS 变量系统（支持深色主题）
 - **代码规范**: ESLint + Prettier + Stylelint
 - **单元测试**: Vitest + Vue Test Utils
@@ -30,6 +31,7 @@
 - 🧪 完整的测试支持 (单元测试 + E2E 测试)
 - 🔧 完整的类型检查
 - 📊 Vue DevTools 支持
+- 🚀 打包构建优化 (Gzip压缩 + 图片优化 + 构建分析)
 
 ## 目录结构
 
@@ -89,7 +91,6 @@
 ├── vitest.config.ts        # Vitest 配置
 ├── playwright.config.ts    # Playwright 配置
 ├── eslint.config.ts        # ESLint 配置
-├── stylelint.config.mjs    # Stylelint 配置
 ├── tsconfig.json           # TypeScript 配置
 ├── tsconfig.app.json       # TypeScript App 配置
 ├── tsconfig.node.json      # TypeScript Node 配置
@@ -124,6 +125,34 @@
 | `pnpm lint`       | 自动修复 ESLint 错误         |
 | `pnpm format`     | 格式化 src 目录下的代码      |
 
+## 基于此模板创建新项目
+
+可以通用 -b 指定要拉取的分支
+
+1. 拉取最简模板（master分支）
+
+   ```bash
+   git clone git@github.com:letengzz/base-vue3-template.git --depth 1 -b master your-project-name
+   ```
+
+2. 拉取集成SCSS模板（scss分支）
+
+   ```bash
+   git clone git@github.com:letengzz/base-vue3-template.git --depth 1 -b scss your-project-name
+   ```
+
+3. 拉取SCSS+UnoCSS模板（scss-uno分支）
+
+   ```bash
+   git clone git@github.com:letengzz/base-vue3-template.git --depth 1 -b scss-uno your-project-name
+   ```
+
+## 分支说明
+
+- master: 最简模板代码
+- scss：集成 SCSS
+- scss-uno：集成 SCSS、UnoCSS
+
 ## 快速开始
 
 ### 安装依赖
@@ -155,6 +184,38 @@ pnpm build
 ```sh
 pnpm preview
 ```
+
+## 打包构建优化
+
+本项目内置了完整的打包构建优化配置，包括以下特性：
+
+### Gzip 压缩
+
+使用 `vite-plugin-compression2` 对构建产物进行 Gzip 压缩，压缩超过 10KB 的文件，可显著减少传输体积。
+
+### 图片优化
+
+使用 `vite-plugin-image-optimizer` 对 PNG、JPEG、WebP 格式图片进行质量优化压缩。
+
+### 构建分析
+
+使用 `rollup-plugin-visualizer` 生成构建分析报告 `stats.html`，可直观查看打包体积分布。
+
+### 代码压缩与混淆
+
+- 使用 `terser` 进行代码压缩
+- 自动移除 `console` 和 `debugger` 语句
+- 代码混淆配置（顶层变量名混淆）
+
+### 旧浏览器兼容
+
+使用 `@vitejs/plugin-legacy` 支持旧浏览器（默认兼容 defaults 和 not IE 11）。
+
+### 代码分割
+
+自动将 Vue、Vue Router、Pinia 库代码分离到 vendor chunk 中，提升缓存效率。
+
+构建完成后可在 `dist/stats.html` 查看构建分析报告。
 
 ## 测试
 
@@ -189,17 +250,9 @@ pnpm lint
 pnpm format
 ```
 
-## 推荐 IDE 配置
-
-- [VS Code](https://code.visualstudio.com/)
-- [Vue - Official (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
-- [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) (浏览器扩展)
-
 ## 详细文档
 
-## 📚 详细文档
-
-请查阅 [docs/README.md](docs/README.md) 获取完整的使用指南：
+使用指南：
 
 - [配置文件说明](docs/configuration.md)
 - [路由系统](docs/router.md)
