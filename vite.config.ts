@@ -19,6 +19,7 @@ import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
 import legacy from '@vitejs/plugin-legacy'
 import { visualizer } from 'rollup-plugin-visualizer'
 import checker from 'vite-plugin-checker'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 
 // https://vite.dev/config/
@@ -50,7 +51,9 @@ export default defineConfig(({ mode }) => {
           /\.vue\?vue/, // .vue
           /\.md$/, // .md
         ],
-        resolvers: [],
+        resolvers: [
+          ElementPlusResolver()
+        ],
         imports: ['vue', 'pinia', VueRouterAutoImports, '@vueuse/core'],
         dts: './types/auto-imports.d.ts',
         dirs: ['src/api/backend/**/*.ts', 'src/utils/**/*.ts'], // 自动导入项目中自定义的API和工具函数
@@ -66,7 +69,10 @@ export default defineConfig(({ mode }) => {
       Components({
         deep: true,
         directoryAsNamespace: false,
-        dts: './types/components.d.ts' // 生成组件类型声明文件的路径
+        dts: './types/components.d.ts', // 生成组件类型声明文件的路径
+        resolvers: [
+          ElementPlusResolver()
+        ],
       }),
       UnoCSS(),
       // 配置 SVG 图标插件
