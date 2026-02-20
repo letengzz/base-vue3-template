@@ -2,7 +2,7 @@
 
 ## 概述
 
-本项目使用 unplugin-vue-router 作为路由解决方案，相比传统的 vue-router，它提供了自动路由生成功能，能够根据 views 目录下的文件结构自动生成路由配置，大大简化了路由管理工作。同时配合 vite-plugin-vue-layouts 实现了布局系统。
+本项目使用 unplugin-vue-router 作为路由解决方案，相比传统的 vue-router，它提供了自动路由生成功能，能够根据 pages目录下的文件结构自动生成路由配置，大大简化了路由管理工作。同时配合 vite-plugin-vue-layouts 实现了布局系统。
 
 ## 自动路由
 
@@ -120,13 +120,6 @@ app.mount('#app')
 ```
 
 ### App.vue 中使用路由
-
-```vue [src/App.vue]
-<!-- src/App.vue -->
-<template>
-  <router-view></router-view>
-</template>
-```
 
 如果使用了布局系统，App.vue 可能只需要包含 router-view：
 
