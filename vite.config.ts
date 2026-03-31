@@ -20,8 +20,13 @@ import checker from 'vite-plugin-checker'
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
+  // 根据当前工作目录中的 `mode` 加载 .env 文件
+  // 设置第三个参数为 '' 来加载所有环境变量，而不管是否有
+  // `VITE_` 前缀。
   const env = loadEnv(mode, process.cwd(), 'VITE_')
-  console.log(env)
+  const { VITE_VERSION, VITE_API_URL } = env
+  console.log(`🚀 API_URL = ${VITE_API_URL}`)
+  console.log(`🚀 VERSION = ${VITE_VERSION}`)
   return {
     plugins: [
       VueRouter({
@@ -48,7 +53,7 @@ export default defineConfig(({ mode }) => {
           /\.md$/, // .md
         ],
         resolvers: [],
-        imports: ['vue', 'pinia', VueRouterAutoImports, '@vueuse/core'],
+        imports: ['vue', 'pinia', VueRouterAutoImports, '@vueuse/core', 'vue-i18n'],
         dts: './types/auto-imports.d.ts',
         dirs: ['src/api/backend/**/*.ts', 'src/utils/**/*.ts'], // 自动导入项目中自定义的API和工具函数
         // eslint 报错解决：'ref' is not defined
@@ -162,12 +167,16 @@ export default defineConfig(({ mode }) => {
       }
     },
     optimizeDeps: {
-      include: ['vue', 'vue-router', 'pinia', '@vueuse/core'],
+      include: ['vue', 'vue-router', 'pinia', '@vueuse/core', 'vue-i18n'],
     },
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
+    },
+    define: {
+      __APP_NAME__: JSON.stringify(env.VITE_APP_TITLE),
+      __APP_VERSION__: JSON.stringify(env.VITE_VERSION),
     },
   }
 })
