@@ -50,6 +50,7 @@
     "npm-run-all2": "^8.0.4",
     "prettier": "3.7.4",
     "rollup-plugin-visualizer": "^6.0.5",
+    "sass": "^1.99.0",
     "terser": "^5.46.0",
     "typescript": "~5.9.3",
     "unplugin-auto-import": "^21.0.0",
