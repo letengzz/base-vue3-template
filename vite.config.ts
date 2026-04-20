@@ -1,133 +1,21 @@
 import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig, loadEnv } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import vueJsx from '@vitejs/plugin-vue-jsx'
-import vueDevTools from 'vite-plugin-vue-devtools'
-import VueRouter from 'unplugin-vue-router/vite'
-import Layouts from 'vite-plugin-vue-layouts'
-// 自动引入注册
-import AutoImport from 'unplugin-auto-import/vite'
-import { VueRouterAutoImports } from 'unplugin-vue-router'
-import Components from 'unplugin-vue-components/vite'
-import UnoCSS from 'unocss/vite'// 导入 UnoCSS 插件
-import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
-import vueI18n from '@intlify/unplugin-vue-i18n/vite'
-import path from 'node:path'
-import { compression } from 'vite-plugin-compression2'
-import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
-import legacy from '@vitejs/plugin-legacy'
-import { visualizer } from 'rollup-plugin-visualizer'
-import checker from 'vite-plugin-checker'
+import usePlugins from './config/plugins'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
+  // 根据当前工作目录中的 `mode` 加载 .env 文件
+  // 设置第三个参数为 '' 来加载所有环境变量，而不管是否有
+  // `VITE_` 前缀。
   const env = loadEnv(mode, process.cwd(), 'VITE_')
-  console.log(env)
+  const { VITE_VERSION, VITE_API_URL } = env
+  console.log(`🚀 API_URL = ${VITE_API_URL}`)
+  console.log(`🚀 VERSION = ${VITE_VERSION}`)
   return {
-    plugins: [
-      VueRouter({
-        // routesFolder: [
-        //   {
-        //     src: 'src/views',
-        //   },
-        // ],
-        dts: './types/typed-router.d.ts',
-      }),
-      Layouts({
-        layoutsDirs: 'src/layouts',
-        defaultLayout: 'default',
-      }),
-      // ⚠️ Vue must be placed after VueRouter()
-      vue(),
-      vueJsx(),
-      vueDevTools(),
-      AutoImport({
-        include: [
-          /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
-          /\.vue$/,
-          /\.vue\?vue/, // .vue
-          /\.md$/, // .md
-        ],
-        resolvers: [
-          ElementPlusResolver()
-        ],
-        imports: ['vue', 'pinia', VueRouterAutoImports, '@vueuse/core'],
-        dts: './types/auto-imports.d.ts',
-        dirs: ['src/api/backend/**/*.ts', 'src/utils/**/*.ts'], // 自动导入项目中自定义的API和工具函数
-        // eslint 报错解决：'ref' is not defined
-        // eslintrc: {
-        //   // 默认 false, true 启用生成。生成一次就可以，避免每次工程启动都生成，一旦生成配置文件之后，最好把 enable 关掉，即改成 false。
-        //   enabled: true,
-        //   // 否则这个文件每次会在重新加载的时候重新生成，这会导致 eslint 有时会找不到这个文件。当需要更新配置文件的时候，再重新打开
-        //   filepath: './.eslintrc-auto-import.json' // 默认就是 ./.eslintrc-auto-import.json
-        //   // globalsPropValue: true // 默认 true
-        // },
-      }),
-      Components({
-        deep: true,
-        directoryAsNamespace: false,
-        dts: './types/components.d.ts', // 生成组件类型声明文件的路径
-        resolvers: [
-          ElementPlusResolver()
-        ],
-      }),
-      UnoCSS(),
-      // 配置 SVG 图标插件
-      createSvgIconsPlugin({
-        // SVG 图标目录
-        iconDirs: [fileURLToPath(new URL('./src/assets/icons', import.meta.url))],
-        // 生成的 symbol ID 格式
-        symbolId: 'icon-[dir]-[name]'
-      }),
-      vueI18n({
-        // 语言包目录
-        include: path.resolve(__dirname, './src/i18n/locales/**'),
-        // 开发模式下也启动编译时处理
-        runtimeOnly: false,
-        // 仅使用组合式 API
-        compositionOnly: true,
-        // 完整安装
-        fullInstall: true,
-      }),
-      // Gzip 压缩
-      compression({
-        algorithms: ['gzip'],
-        threshold: 10240, // 超过 10KB 的文件才压缩
-        deleteOriginalAssets: false, // 不删除原文件
-      }),
-      ViteImageOptimizer({
-        png: {
-          quality: 80,
-        },
-        jpeg: {
-          quality: 80,
-        },
-        webp: {
-          quality: 80,
-        },
-      }),
-      legacy({
-        targets: ['defaults', 'not IE 11'],
-      }),
-      visualizer({
-        filename: 'stats.html',
-      }),
-      checker({
-        eslint: {
-          useFlatConfig: true,
-          lintCommand: 'eslint "./src/**/*.{ts,tsx,vue}"',
-          dev: {
-            logLevel: ['error'],
-          },
-        },
-        overlay: {
-          initialIsOpen: true,
-        },
-      }),
-    ],
+    plugins: usePlugins(mode, env),
     build: {
       outDir: 'dist',
       assetsDir: 'assets',
@@ -179,12 +67,18 @@ export default defineConfig(({ mode }) => {
       }
     },
     optimizeDeps: {
-      include: ['vue', 'vue-router', 'pinia', '@vueuse/core'],
+      include: ['vue', 'vue-router', 'pinia', '@vueuse/core', 'vue-i18n'],
     },
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
+    },
+    define: {
+      __APP_NAME__: JSON.stringify(env.VITE_APP_TITLE),
+      __APP_VERSION__: JSON.stringify(env.VITE_VERSION),
+      __APP_BUILD_GZIP__: JSON.stringify(env.VITE_BUILD_GZIP),
+      __APP_ENV__: JSON.stringify(env),
     },
   }
 })
