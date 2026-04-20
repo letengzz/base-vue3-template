@@ -2,18 +2,6 @@ import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig, loadEnv } from 'vite'
 import usePlugins from './config/plugins'
-// import vue from '@vitejs/plugin-vue'
-// import vueJsx from '@vitejs/plugin-vue-jsx'
-// import vueDevTools from 'vite-plugin-vue-devtools'
-
-// // 自动引入注册
-// import AutoImport from 'unplugin-auto-import/vite'
-// import Components from 'unplugin-vue-components/vite'
-// import { compression } from 'vite-plugin-compression2'
-//
-//
-// import { visualizer } from 'rollup-plugin-visualizer'
-//
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -25,7 +13,7 @@ export default defineConfig(({ mode }) => {
   console.log(`🚀 API_URL = ${VITE_API_URL}`)
   console.log(`🚀 VERSION = ${VITE_VERSION}`)
   return {
-    plugins: usePlugins(mode),
+    plugins: usePlugins(mode, env),
     build: {
       outDir: 'dist',
       assetsDir: 'assets',

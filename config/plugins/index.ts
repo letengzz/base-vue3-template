@@ -12,20 +12,16 @@ import useLegacy from './legacy'
 import useImageOptimizer from './imageOptimizer'
 import useVisualizer from './visualizer'
 import useChecker from './checker'
-import { Env } from '@/utils/env'
 /**
  * @description: vite插件列表
  */
-const usePlugins = (mode: string) => {
+const usePlugins = (mode: string, env: Record<string, string>) => {
   const isDev = mode === 'development'
   const plugins: PluginOption[] = []
   plugins.push(useAutoRouter(), useLayout())
   plugins.push(vue(), vueJsx())
   if (isDev) {
     plugins.push(useDevTools())
-  }
-  if (Env.getBoolean('VITE_BUILD_GZIP')) {
-    plugins.push(useCompress())
   }
   plugins.push(useAutoImport())
   plugins.push(useComponents())
@@ -34,6 +30,9 @@ const usePlugins = (mode: string) => {
   plugins.push(useImageOptimizer())
   plugins.push(useVisualizer())
   plugins.push(useChecker())
+  if (env.VITE_BUILD_GZIP) {
+    plugins.push(useCompress())
+  }
   return plugins
 }
 export default usePlugins
