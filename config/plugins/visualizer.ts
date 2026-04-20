@@ -1,4 +1,4 @@
-import visualizer from 'rollup-plugin-visualizer'
+import { visualizer } from 'rollup-plugin-visualizer'
 /**
  * @description: 代码分析插件，生成可视化报告
  */
