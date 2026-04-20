@@ -5,6 +5,7 @@ import legacy from '@vitejs/plugin-legacy'
 const useLegacy = () => {
   return legacy({
     targets: ['defaults', 'not IE 11'],
+    modernTargets: ['defaults', 'not IE 11'],
   })
 }
 
