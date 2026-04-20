@@ -2,7 +2,6 @@ import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig, loadEnv } from 'vite'
 import usePlugins from './config/plugins'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 
 // https://vite.dev/config/

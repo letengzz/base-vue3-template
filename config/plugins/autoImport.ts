@@ -2,6 +2,7 @@
 // 可以减少手动import语句，提高开发效率，并提供类型提示
 import AutoImport from 'unplugin-auto-import/vite'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 /**
  * @description: 配置自动导入功能
  * 支持Vue、Vue Router、Pinia等框架API的自动导入
@@ -17,7 +18,9 @@ const useAutoImport = () => {
       /\.vue\?vue/, // .vue
       /\.md$/, // .md
     ],
-    resolvers: [],
+    resolvers: [
+      ElementPlusResolver(),
+    ],
     imports: ['vue', 'pinia', VueRouterAutoImports, '@vueuse/core', 'vue-i18n'],
     dts: './types/auto-imports.d.ts',
     dirs: ['src/api/backend/**/*.ts', 'src/utils/**/*.ts'], // 自动导入项目中自定义的API和工具函数
