@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="color: var(--wm-color-primary);">
     index
   </div>
 </template>
