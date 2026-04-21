@@ -12,6 +12,7 @@ import useLegacy from './legacy'
 import useImageOptimizer from './imageOptimizer'
 import useVisualizer from './visualizer'
 import useChecker from './checker'
+import useMock from './mock'
 /**
  * @description: vite插件列表
  */
@@ -22,6 +23,7 @@ const usePlugins = (mode: string, env: Record<string, string>) => {
   plugins.push(vue(), vueJsx())
   if (isDev) {
     plugins.push(useDevTools())
+    plugins.push(useMock())
   }
   plugins.push(useAutoImport())
   plugins.push(useComponents())
