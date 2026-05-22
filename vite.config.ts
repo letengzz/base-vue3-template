@@ -2,7 +2,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig, loadEnv } from 'vite'
 import usePlugins from './config/plugins'
-
+import useServer from './config/server'
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -15,6 +15,7 @@ export default defineConfig(({ mode }) => {
   console.log(`🚀 VERSION = ${VITE_VERSION}`)
   return {
     plugins: usePlugins(mode, env),
+    server: useServer(env),
     build: {
       outDir: 'dist',
       assetsDir: 'assets',
