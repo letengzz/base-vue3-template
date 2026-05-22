@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Mock from 'mockjs'
 import { ApiResp } from '../src/http/core'
 import { MockMethod } from 'vite-plugin-mock'
@@ -37,7 +38,7 @@ const demoMock: MockMethod[] = [
     url: '/api/demo',
     method: 'get',
     timeout: 1000,
-    response: ({ query }) => {
+    response: ({ query }: { query: Record<string, any> }) => {
       const pageNum = parseInt(query.pageNum) || 1
       const pageSize = parseInt(query.pageSize) || 10
       const keyword = query.keyword || ''
@@ -45,7 +46,7 @@ const demoMock: MockMethod[] = [
       let filteredList = demoList
       if (keyword) {
         filteredList = demoList.filter(
-          (item) =>
+          (item: { title: string | any[]; content: string | any[]; author: string | any[] }) =>
             item.title.includes(keyword) ||
             item.content.includes(keyword) ||
             item.author.includes(keyword),
@@ -62,9 +63,9 @@ const demoMock: MockMethod[] = [
   {
     url: '/api/demo/:id',
     method: 'get',
-    timeout: 3000,
-    response: ({ query }) => {
-      const item = demoList.find((item) => item.id === parseInt(query.id))
+    timeout: 1000,
+    response: ({ query }: { query: Record<string, any> }) => {
+      const item = demoList.find((item: { id: number | any[] }) => item.id === parseInt(query.id))
       if (item) {
         return success(item)
       } else {
@@ -75,7 +76,7 @@ const demoMock: MockMethod[] = [
   {
     url: '/api/demo',
     method: 'post',
-    response: ({ body }) => {
+    response: ({ body }: { body: Record<string, any> }) => {
       const newItem = {
         id: demoList.length + 1,
         ...body,
@@ -89,8 +90,8 @@ const demoMock: MockMethod[] = [
   {
     url: '/api/demo/:id',
     method: 'put',
-    response: ({ query, body }) => {
-      const index = demoList.findIndex((item) => item.id === parseInt(query.id))
+    response: ({ query }: { query: Record<string, any> }, { body }: { body: Record<string, any> }) => {
+      const index = demoList.findIndex((item: { id: number | any[] }) => item.id === parseInt(query.id))
       if (index !== -1) {
         demoList[index] = {
           ...demoList[index],
@@ -106,8 +107,8 @@ const demoMock: MockMethod[] = [
   {
     url: '/api/demo/:id',
     method: 'delete',
-    response: ({ query }) => {
-      const index = demoList.findIndex((item) => item.id === parseInt(query.id))
+    response: ({ query }: { query: Record<string, any> }) => {
+      const index = demoList.findIndex((item: { id: number | any[] }) => item.id === parseInt(query.id))
       if (index !== -1) {
         demoList.splice(index, 1)
         return success(null)
