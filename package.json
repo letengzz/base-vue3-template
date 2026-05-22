@@ -1,8 +1,9 @@
 {
   "name": "base-vue3-template",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
+  "license": "MIT",
   "engines": {
     "node": "^20.19.0 || >=22.12.0",
     "pnpm": ">=10"
