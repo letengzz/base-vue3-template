@@ -5,6 +5,8 @@ import { useRouter } from '@/router'
 import { useStore } from './stores'
 import { useI18n } from './i18n'
 import { useAssets } from './plugins/assets'
+// 引入组件库的少量全局样式变量
+import 'tdesign-vue-next/es/style/index.css';
 
 const app = createApp(App)
 useRouter(app)
