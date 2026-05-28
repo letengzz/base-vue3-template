@@ -24,6 +24,7 @@
   "dependencies": {
     "@iconify/vue": "^5.0.0",
     "@vueuse/core": "^14.2.0",
+    "ant-design-vue": "4.x",
     "axios": "^1.16.1",
     "pinia": "^3.0.4",
     "pinia-plugin-persistedstate": "^4.7.1",
