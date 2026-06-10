@@ -13,6 +13,7 @@ import useImageOptimizer from './imageOptimizer'
 import useVisualizer from './visualizer'
 import useChecker from './checker'
 import useMock from './mock'
+import tailwindcss from '@tailwindcss/vite'
 /**
  * @description: vite插件列表
  */
@@ -32,6 +33,7 @@ const usePlugins = (mode: string, env: Record<string, string>) => {
   plugins.push(useImageOptimizer())
   plugins.push(useVisualizer())
   plugins.push(useChecker())
+  plugins.push(tailwindcss())
   if (env.VITE_BUILD_GZIP) {
     plugins.push(useCompress())
   }
