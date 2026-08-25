@@ -3,28 +3,48 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig, loadEnv } from 'vite'
 import usePlugins from './config/plugins'
 import useServer from './config/server'
+
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   // 根据当前工作目录中的 `mode` 加载 .env 文件
-  // 设置第三个参数为 '' 来加载所有环境变量，而不管是否有
-  // `VITE_` 前缀。
+  // 设置第三个参数为 '' 来加载所有环境变量，而不管是否有 `VITE_` 前缀。
+
   const env = loadEnv(mode, process.cwd(), 'VITE_')
-  const { VITE_VERSION, VITE_API_URL } = env
+  // 提取环境变量
+  const { VITE_VERSION, VITE_BASE_URL, VITE_API_URL, VITE_APP_TITLE, VITE_BUILD_GZIP } = env
   console.log(`🚀 API_URL = ${VITE_API_URL}`)
   console.log(`🚀 VERSION = ${VITE_VERSION}`)
   return {
+    // 基础路径
+    base: VITE_BASE_URL,
+    // 插件配置
     plugins: usePlugins(mode, env),
+    // 服务器配置
     server: useServer(env),
+    // 构建配置
     build: {
+      target: 'es2015',
       outDir: 'dist',
       assetsDir: 'assets',
       // 4kb以下 转Base64
       assetsInlineLimit: 4096,
-      // chunkSizeWarningLimit:1500, //配置文件大小提醒限制 默认为500
+      chunkSizeWarningLimit: 2000, //配置文件大小提醒限制 默认为500
       reportCompressedSize: true,
       cssCodeSplit: true,
-      minify: 'terser',
-      sourcemap: false,
+      // 压缩方式
+      minify: 'esbuild',
+      // 是否生成 sourcemap 文件
+      // 开启后，浏览器可以使用 sourcemap 文件来定位到原始代码的位置
+      // 关闭后，浏览器只能定位到打包后的代码的位置
+      sourcemap: 'hidden',
+      emptyOutDir: true,
+      // cssTarget: 'chrome61',
+      // 动态导入配置
+      dynamicImportVarsOptions: {
+        warnOnError: true,
+        exclude: [],
+        include: ['src/views/**/*.vue']
+      },
       rollupOptions: {
         output: {
           // vendor 为自定义的文件块名称，可以自己定义，后面的数组为需要打包到这个块中的依赖包。
@@ -74,10 +94,9 @@ export default defineConfig(({ mode }) => {
       },
     },
     define: {
-      __APP_NAME__: JSON.stringify(env.VITE_APP_TITLE),
-      __APP_VERSION__: JSON.stringify(env.VITE_VERSION),
-      __APP_BUILD_GZIP__: JSON.stringify(env.VITE_BUILD_GZIP),
-      __APP_ENV__: JSON.stringify(env),
+      __APP_NAME__: JSON.stringify(VITE_APP_TITLE),
+      __APP_VERSION__: JSON.stringify(VITE_VERSION),
+      __APP_BUILD_GZIP__: JSON.stringify(VITE_BUILD_GZIP),
     },
   }
 })
