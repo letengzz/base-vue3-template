@@ -5,21 +5,13 @@
     "source.fixAll.eslint": "explicit"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "stylelint.validate": [
-    "css",
-    "html",
-    "scss",
-    "vue"
-  ],
-  "stylelint.snippet": [
-    "css",
-    "scss",
-    "vue"
-  ],
+  "stylelint.validate": ["css", "html", "scss", "vue"],
+  "stylelint.snippet": ["css", "scss", "vue"],
   "files.associations": {
     "*.vue": "vue"
   },
   "css.validate": false,
   "scss.validate": false,
-  "less.validate": false
+  "less.validate": false,
+  "i18n-ally.localesPaths": ["src/i18n", "src/i18n/locales"]
 }
