@@ -2,7 +2,7 @@ import { createRouter, createWebHistory, type RouteLocationNormalized } from 'vu
 import type { App } from 'vue'
 import { routes, handleHotUpdate } from 'vue-router/auto-routes'
 import { setupLayouts } from 'virtual:generated-layouts'
-import i18n, { loadLanguage } from '@/i18n'
+import { loadLanguage, loadLocaleModules } from '@/i18n'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,18 +24,7 @@ async function loadRouteLocales(to: RouteLocationNormalized) {
 
   // 加载路由所需的语言模块
   if (to.meta.locales) {
-    for (const locale of to.meta.locales as string[]) {
-      try {
-        await import(`@/i18n/locales/modules/${currentLang}/${locale}.ts`).then((messages) => {
-          // 合并到当前语言的消息中
-          i18n.global.mergeLocaleMessage(currentLang, {
-            [locale]: messages.default,
-          })
-        })
-      } catch (e) {
-        console.warn(`Failed to load locale module: ${locale}`, e)
-      }
-    }
+    await loadLocaleModules(currentLang, to.meta.locales as string[])
   }
 }
 
