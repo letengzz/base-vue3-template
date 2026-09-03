@@ -6,7 +6,7 @@ import path from 'node:path'
 const useI18n = () => {
   return vueI18n({
     // 语言包目录
-    include: path.resolve(__dirname, './src/i18n/locales/**'),
+    include: path.resolve(__dirname, '../../src/i18n/locales/**'),
     // 开发模式下也启动编译时处理
     runtimeOnly: false,
     // 仅使用组合式 API

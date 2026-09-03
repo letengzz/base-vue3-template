@@ -14,10 +14,12 @@
 </template>
 
 <script setup lang="ts">
-import { loadLanguage } from '@/i18n'
+import { loadLanguage, loadLocaleModules } from '@/i18n'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 
 const { t, locale } = useI18n()
+const route = useRoute()
 console.log(t('common.welcome', { name: 'Hjc' }))
 
 const currentLocale = locale
@@ -34,6 +36,11 @@ const languages = [
 const onChangeLanguage = async (lang: string) => {
   // 加载语言包
   await loadLanguage(lang)
+  // 加载当前页面所需的语言模块
+  const locales = route.meta.locales as string[] | undefined
+  if (locales) {
+    await loadLocaleModules(lang, locales)
+  }
   // 设置当前语言
   locale.value = lang
 }
